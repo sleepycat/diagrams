@@ -15,6 +15,7 @@ explanation: |md
   - Zero downtime upgrades/rollbacks allow for business hours deployments
   - Maintainance via pull requests
   - Low operational burden supports public health focus
+  - System level Zero Trust implementation
 | {
   near: center-left
 }
@@ -54,7 +55,10 @@ gh: GitHub {
     height: 50
   }
 
-  branch -> commit -> pr -> merge -> branch
+  branch -> commit
+  commit -> pr: vulnerability scan
+  pr -> merge: deployment
+  merge -> branch
 }
 
 internet: The Internet {
@@ -102,14 +106,14 @@ gcp: Google Cloud {
           }
         }
 
-        k8s: GKE Autopilot Cluster {
+        k8s: GKE Autopilot Cluster/Managed PaaS {
           style: {
             stroke: blue
             font-color: blue
             fill: transparent
           }
 
-          ingress: Ingress {
+          ingress: Google Managed Ingress {
             icon: ./icons/kubernetes/pod.svg
             shape: image
           }
@@ -119,9 +123,17 @@ gcp: Google Cloud {
             shape: image
           }
 
-          django: Django App {
-            icon: ./icons/django/logo.svg
-            shape: image
+          container: Low attack surface container {
+            style: {
+              stroke: black
+              font-color: black
+              fill: transparent
+            }
+
+            django: Django App {
+              icon: ./icons/django/logo.svg
+              shape: image
+            }
           }
 
           pg: HA PostgreSQL Cluster {
@@ -129,13 +141,13 @@ gcp: Google Cloud {
             shape: image
           }
 
-          flux: Pull based deployment {
+          flux: GitOps operator {
             icon: ./icons/flux/logo.svg
             shape: image
           }
 
-          ingress -> django: https
-          django -> pg: https
+          ingress -> container: mtls
+          container -> pg: mtls
         }
       }
     }
@@ -143,7 +155,7 @@ gcp: Google Cloud {
 }
 
 internet -> gcp.project.vpc.fw.k8s.ingress: https
-gcp.project.vpc.fw.k8s.flux -> gh: Pull based deployment
+gcp.project.vpc.fw.k8s.flux -> gh: Pull based deployment via https
 letsencrypt <-> gcp.project.vpc.fw.k8s.certmanager: ACME
-gcp.project.vpc.fw.clouddns <-> gcp.project.vpc.fw.k8s.certmanager: https
+gcp.project.vpc.fw.clouddns <-> gcp.project.vpc.fw.k8s.certmanager: least priviledge service account via https
 gcp.project.vpc.fw.clouddns <-> letsencrypt: ACME
