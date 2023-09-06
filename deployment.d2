@@ -1,0 +1,149 @@
+direction: down
+
+explanation: |md
+  # DMIA deployment archtecture
+  The ATO process imposes many requirements on systems handeling Protected B data.
+
+  This architecture aims to move the burden of meeting them from the developers to the infrastructure.
+
+  Key features:
+  - Addresses compliance/audit/security requirements for PB data
+  - Addresses Business Continuity and Disaster Recovery requirements for PB data
+  - Increases developer velocity while maintaining compliance
+  - Isolation reduces blast radius and supports developer autonomy
+  - Fully automated TLS certificate management (internal and external)
+  - Zero downtime upgrades/rollbacks allow for business hours deployments
+  - Maintainance via pull requests
+  - Low operational burden supports public health focus
+| {
+  near: center-left
+}
+
+gh: GitHub {
+  icon: ./icons/gcp/github.svg
+  style: {
+    stroke: "#000000"
+    fill: "#ffffff"
+  }
+
+  pr: Pull Request {
+    icon: ./icons/gcp/git-pull-request.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  branch: Branch {
+    icon: ./icons/gcp/git-branch.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  merge: Merge {
+    icon: ./icons/gcp/git-merge.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  commit: Commit {
+    icon: ./icons/gcp/git-commit.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  branch -> commit -> pr -> merge -> branch
+}
+
+internet: The Internet {
+  icon: ./icons/gcp/my_cloud.svg
+  shape: image
+}
+
+letsencrypt: Let's Encrypt {
+  icon: ./icons/letsencrypt/logo.svg
+  shape: image
+}
+
+gcp: Google Cloud {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  project: Project {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    vpc: User managed VPC 10.1.0.0./16 {
+      style: {
+        stroke: blue
+        font-color: blue
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+        clouddns: Cloud DNS {
+          icon: ./icons/gcp/cloud_dns.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        k8s: GKE Autopilot Cluster {
+          style: {
+            stroke: blue
+            font-color: blue
+            fill: transparent
+          }
+
+          ingress: Ingress {
+            icon: ./icons/kubernetes/pod.svg
+            shape: image
+          }
+
+          certmanager: Cert Manager {
+            icon: ./icons/certmanager/logo.svg
+            shape: image
+          }
+
+          django: Django App {
+            icon: ./icons/django/logo.svg
+            shape: image
+          }
+
+          pg: HA PostgreSQL Cluster {
+            icon: ./icons/cloudnativepg/logo.svg
+            shape: image
+          }
+
+          flux: Pull based deployment {
+            icon: ./icons/flux/logo.svg
+            shape: image
+          }
+
+          ingress -> django: https
+          django -> pg: https
+        }
+      }
+    }
+  }
+}
+
+internet -> gcp.project.vpc.fw.k8s.ingress: https
+gcp.project.vpc.fw.k8s.flux -> gh: Pull based deployment
+letsencrypt <-> gcp.project.vpc.fw.k8s.certmanager: ACME
+gcp.project.vpc.fw.clouddns <-> gcp.project.vpc.fw.k8s.certmanager: https
+gcp.project.vpc.fw.clouddns <-> letsencrypt: ACME
