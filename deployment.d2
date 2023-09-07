@@ -1,19 +1,21 @@
 direction: down
 
 explanation: |md
-  # DMIA deployment archtecture
-  The ATO process imposes many requirements on systems handeling Protected B data.
+  # DMIA deployment architecture
 
-  This architecture aims to move the burden of meeting them from the developers to the infrastructure.
+  This architecture aims to reduce or eliminate the tradeoff between developer
+   speed/autonomy and security/compliance.
+
+  This approach allows PHAC to move at the speed of relevance for public health.
 
   Key features:
   - Addresses compliance/audit/security requirements for PB data
-  - Addresses Business Continuity and Disaster Recovery requirements for PB data
+  - Addresses Business Continuity and Disaster Recovery requirements for PB systems
   - Increases developer velocity while maintaining compliance
+  - All maintainance via pull requests
   - Isolation reduces blast radius and supports developer autonomy
   - Fully automated TLS certificate management (internal and external)
   - Zero downtime upgrades/rollbacks allow for business hours deployments
-  - Maintainance via pull requests
   - Low operational burden supports public health focus
   - System level Zero Trust implementation
 | {
@@ -57,7 +59,7 @@ gh: GitHub {
 
   branch -> commit
   commit -> pr: vulnerability scan
-  pr -> merge: deployment
+  pr -> merge: code review
   merge -> branch
 }
 
@@ -75,6 +77,14 @@ gcp: Google Cloud {
   style: {
     stroke: "#000000"
     fill: "#f1f3f4"
+  }
+
+  scc: Security Command Center {
+    icon: ./icons/gcp/security_command_center.svg
+    style: {
+      stroke: "#808080"
+      fill: "#ffffff"
+    }
   }
 
   project: Project {
@@ -100,6 +110,14 @@ gcp: Google Cloud {
         }
         clouddns: Cloud DNS {
           icon: ./icons/gcp/cloud_dns.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        registry: Artifact Registry {
+          icon: ./icons/gcp/artifact_registry.svg
           style: {
             stroke: "#808080"
             fill: "#ffffff"
@@ -156,6 +174,8 @@ gcp: Google Cloud {
 
 internet -> gcp.project.vpc.fw.k8s.ingress: https
 gcp.project.vpc.fw.k8s.flux -> gh: Pull based deployment via https
+gcp.project.vpc.fw.k8s -> gcp.project.vpc.fw.registry: Pull images via https
 letsencrypt <-> gcp.project.vpc.fw.k8s.certmanager: ACME
 gcp.project.vpc.fw.clouddns <-> gcp.project.vpc.fw.k8s.certmanager: least priviledge service account via https
 gcp.project.vpc.fw.clouddns <-> letsencrypt: ACME
+gcp.project -> gcp.scc: All project logs/events visible in Security Command Center
