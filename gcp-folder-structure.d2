@@ -1,0 +1,106 @@
+direction: down
+
+hcphac: HC/PHAC {
+  orgadmins: Org Admins {
+    icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+    shape: image
+  }
+}
+
+projectteam: Project team {
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  shape: image
+}
+
+gcp: Google Cloud {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  org: Organization {
+    style: {
+      stroke: "#ffffff"
+      fill: "#eeebea"
+    }
+
+    dtb: DTB {
+      icon: ./icons/general/globe.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+  }
+
+  folders: Folders {
+    style: {
+      stroke: "#ffffff"
+      fill: "#fef7e0"
+    }
+
+    dmiafolder: DMIA folder {
+      icon: ./icons/general/folder.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+
+    dtbfolder: DTB folder {
+      icon: ./icons/general/folder.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+  }
+
+  projects: Projects {
+    direction: down
+    style: {
+      stroke: "#ffffff"
+      fill: "#e2f3ec"
+    }
+
+    dmiaproject: DMIA Project 1 {
+      icon: ./icons/general/suitcase.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+    dmiaproject2: DMIA Project 2 {
+      icon: ./icons/general/suitcase.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+  }
+
+  resources: Resources {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    resource: Project resources {
+      icon: ./icons/gcp/cloud_run.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+  }
+
+  org.dtb -> folders.dtbfolder
+  org.dtb -> folders.dmiafolder
+  folders.dmiafolder -> projects.dmiaproject
+  projects.dmiaproject -> resources.resource
+}
+
+direction: right
+hcphac.orgadmins -> gcp.org.dtb: https
+projectteam -> gcp.projects.dmiaproject: https
+# hcphac.orgadmins -> projectteam: manages accounts
