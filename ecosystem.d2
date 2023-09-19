@@ -1,0 +1,286 @@
+epi: Epidemiologist {
+  icon: ./icons/general/laptop.svg
+  shape: image
+}
+
+epiexplainer: |md
+  System access via web browser
+   from HC managed devices.
+| {
+  near: epi
+}
+
+gh: GitHub repository {
+  icon: ./icons/github/logo.svg
+
+  direction: left
+  style: {
+    stroke: "#000000"
+    fill: "#ffffff"
+  }
+
+  pr: Pull Request {
+    icon: ./icons/github/pull-request.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  branch: Branch {
+    icon: ./icons/github/branch.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  merge: Merge {
+    icon: ./icons/github/merge.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  commit: Commit {
+    icon: ./icons/github/commit.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  branch -> commit
+  commit -> pr: vulnerability scan
+  pr -> merge: code review
+  merge -> branch
+}
+
+internet: The Internet {
+  icon: ./icons/gcp/my_cloud.svg
+  shape: image
+}
+
+letsencrypt: "Let's Encrypt" {
+  icon: ./icons/letsencrypt/logo.svg
+  shape: image
+}
+
+gcp: "" {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  gcpicon: "" {
+    icon: ./icons/gcp/logo-text.svg
+    width: 300
+    shape: image
+  }
+
+  scc: Security Command Center {
+    icon: ./icons/gcp/security_command_center.svg
+    style: {
+      stroke: "#808080"
+      fill: "#ffffff"
+    }
+  }
+
+  epiproject: Epidemiological Analysis Project {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    vpc: Default VPC Network 10.1.0.0/16 {
+      style: {
+        stroke: blue
+        font-color: blue
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+
+        vertexai: Data Analysis Tools {
+          icon: ./icons/gcp/vertexai.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        storage: Data storage (Parquet files)) {
+          icon: ./icons/gcp/cloud_storage.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+      }
+    }
+  }
+
+  project: Data sharing Project {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    vpc: Default VPC Network 10.1.0.0/16 {
+      style: {
+        stroke: blue
+        font-color: blue
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+        clouddns: Cloud DNS {
+          icon: ./icons/gcp/cloud_dns.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        registry: Artifact Registry {
+          icon: ./icons/gcp/artifact_registry.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        k8s: Google Managed PaaS/GKE Autopilot {
+          style: {
+            stroke: blue
+            font-color: blue
+            fill: transparent
+          }
+
+          ingress: Google Managed Ingress {
+            icon: ./icons/kubernetes/pod.svg
+            shape: image
+          }
+
+          certmanager: TLS Certificate Manager {
+            icon: ./icons/certmanager/logo.svg
+            shape: image
+          }
+
+          container: Low attack surface container {
+            style: {
+              stroke: black
+              font-color: black
+              fill: transparent
+            }
+
+            django: Django App {
+              icon: ./icons/django/logo.svg
+              shape: image
+            }
+          }
+
+          pg: PostgreSQL Database Cluster {
+            icon: ./icons/cloudnativepg/logo.svg
+            shape: image
+          }
+
+          flux: GitOps operator {
+            icon: ./icons/flux/logo.svg
+            shape: image
+          }
+
+          ingress -> container: mtls
+          container -> pg: mtls
+        }
+      }
+    }
+  }
+}
+
+gcp.epiprojectexplainer: |md
+
+  ## Epidemiological Analysis Project
+  Adoption of cloud based data analysis tools are the first step towards interoperability.
+  - Removes file size limitations and data corruption issues 
+  - Full control over libraries for analysis
+  - Adjustable compute resources (more compute = faster analysis)
+  - Low cost scalable data storage
+| {
+  near: gcp.epiproject
+}
+
+explanation: |md
+  # Security architecture
+  PHAC's core business is data aggregation and analysis.
+
+  Data arrives in dangerous formats from untrusted sources increasingly targeted by ransomware gangs.
+
+  Architectural choices can contain the spread of compromise just as vaccines contain the spread of disease. 
+
+  - risk = likelihood * impact
+    - Highly segmented architecture reduces impact/spread of compromise.
+    - Technology selection and rapid updates reduces likelihood.
+  - Continual security scanning at multiple levels to prompt updates.
+    - Codesql source code scanning
+    - Dependabot dependency scanning
+    - Secrets scanning
+    - Container security scanning
+| {
+  near: gcp
+}
+
+gcp.explanation: |md
+  # Data sharing Project
+
+  Interoperability and timely data sharing is enabled with APIs for internal and external partners.
+
+  Deployment architecture aims to reduce or eliminate the tradeoff between developer
+   speed/autonomy and security/compliance.
+
+  - Addresses requirements for PB data
+    - Compliance
+    - Audit
+    - Security
+    - Monitoring
+    - Business Continuity
+    - Disaster Recovery
+  - Increases developer velocity while maintaining compliance
+  - All maintainance via pull requests
+  - Isolation reduces blast radius and supports developer autonomy
+  - Fully automated TLS certificate management (internal and external)
+  - Zero downtime upgrades/rollbacks allow for business hours deployments
+  - Low operational burden supports public health focus
+  - System level Zero Trust implementation
+| {
+  near: gcp.project
+}
+
+internet -> gcp.project.vpc.fw.k8s.ingress: https
+gcp.project.vpc.fw.k8s.flux -> gh: Pull based deployment via https
+gcp.project.vpc.fw.k8s -> gcp.project.vpc.fw.registry: Pull images via https
+letsencrypt <-> gcp.project.vpc.fw.k8s.certmanager: ACME
+gcp.project.vpc.fw.clouddns <-> gcp.project.vpc.fw.k8s.certmanager: {
+  label: |md
+    least priviledge 
+    service account 
+    via https
+  |
+}
+gcp.project.vpc.fw.clouddns <-> letsencrypt: ACME
+gcp.epiproject -> gcp.scc: All project logs/events visible in Security Command Center
+gcp.project -> gcp.scc: All project logs/events visible in Security Command Center
+
+epi -> gcp.epiproject.vpc.fw.vertexai: Epis working with cloud Data Analysis Tools
+gcp.epiproject.vpc.fw.vertexai -> gcp.epiproject.vpc.fw.storage: Data and Analysis results stored in Cloud Storage
