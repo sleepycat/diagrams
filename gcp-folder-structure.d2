@@ -1,10 +1,13 @@
 direction: down
 
-hcphac: HC/PHAC {
-  orgadmins: Org Admins {
-    icon: https://icons.terrastruct.com/essentials%2F359-users.svg
-    shape: image
-  }
+orgadmins: DTB Org Admins {
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  shape: image
+}
+
+de: DE Cloud Team {
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  shape: image
 }
 
 projectteam: Project team {
@@ -24,7 +27,7 @@ gcp: Google Cloud {
       fill: "#eeebea"
     }
 
-    dtb: DTB {
+    sharedorg: Shared org {
       icon: ./icons/general/globe.svg
       style: {
         stroke: "#808080"
@@ -94,13 +97,14 @@ gcp: Google Cloud {
     }
   }
 
-  org.dtb -> folders.dtbfolder
-  org.dtb -> folders.dmiafolder
+  org.sharedorg -> folders.dtbfolder
+  org.sharedorg -> folders.dmiafolder
   folders.dmiafolder -> projects.dmiaproject
   projects.dmiaproject -> resources.resource
 }
 
 direction: right
-hcphac.orgadmins -> gcp.org.dtb: https
-projectteam -> gcp.projects.dmiaproject: https
+orgadmins -> gcp.org.sharedorg: manages
+de -> gcp.folders.dmiafolder: manages
+projectteam -> gcp.projects.dmiaproject: manages
 # hcphac.orgadmins -> projectteam: manages accounts
