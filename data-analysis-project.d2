@@ -1,0 +1,147 @@
+direction: down
+
+epi: Epidemiologist {
+  icon: ./icons/general/laptop.svg
+  shape: image
+}
+
+epi2: Epidemiologist {
+  icon: ./icons/general/laptop.svg
+  shape: image
+}
+
+epiexplainer: |md
+  System access via web browser
+   from HC managed devices using 
+   hardware security keys.
+| {
+  near: epi
+}
+
+gcp: "" {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  gcpicon: "" {
+    icon: ./icons/gcp/logo-text.svg
+    width: 300
+    shape: image
+  }
+
+  epiproject: Isolated Epidemiological Analysis Project {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    vpc: Default VPC Network 10.1.0.0/16 {
+      style: {
+        stroke: blue
+        font-color: blue
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+
+        vertexai: Analysis Environment (Jupyter Notebooks) {
+          icon: ./icons/gcp/vertexai.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        storage: Encrypted Data storage (Parquet files) {
+          icon: ./icons/gcp/cloud_storage.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+      }
+    }
+  }
+
+  epiproject2: Isolated Epidemiological Analysis Project {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    vpc: Default VPC Network 10.1.0.0/16 {
+      style: {
+        stroke: blue
+        font-color: blue
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+
+        vertexai: Analysis Environment (Jupyter Notebooks) {
+          icon: ./icons/gcp/vertexai.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        storage: Encrypted Data storage (Parquet files) {
+          icon: ./icons/gcp/cloud_storage.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+      }
+    }
+  }
+  scc: Security Command Center {
+    icon: ./icons/gcp/security_command_center.svg
+    style: {
+      stroke: "#808080"
+      fill: "#ffffff"
+    }
+  }
+}
+
+gcp.epiproject -> gcp.scc: Security logs/events visible in Security Command Center
+epi -> gcp.epiproject.vpc.fw.vertexai: {
+  label: encrypted connection
+}
+epi2 -> gcp.epiproject2.vpc.fw.vertexai: {
+  label: encrypted connection
+}
+gcp.epiproject.vpc.fw.vertexai -> gcp.epiproject.vpc.fw.storage: Data and Analysis results stored in Cloud Storage
+
+gcp.epiproject2 -> gcp.scc: Security logs/events visible in Security Command Center
+gcp.epiproject2.vpc.fw.vertexai -> gcp.epiproject2.vpc.fw.storage: Data and Analysis results stored in Cloud Storage
+
+epiprojectexplainer: |md
+  ## Epidemiological Analysis Project
+  - Data isolated in its own restriced project
+  - Removes file size limitations and data corruption issues 
+  - Full control over libraries for analysis
+  - Adjustable compute resources (more compute = faster analysis)
+  - Data storage:
+    - Encrypted at rest
+    - Scalable
+    - Versioned
+| {
+  near: gcp
+}
