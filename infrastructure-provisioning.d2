@@ -1,0 +1,165 @@
+gh: GitHub repository {
+  icon: ./icons/github/logo.svg
+
+  style: {
+    stroke: "#000000"
+    fill: "#ffffff"
+  }
+
+  pr: Pull Request {
+    icon: ./icons/github/pull-request.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  branch: Branch {
+    icon: ./icons/github/branch.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  merge: Merge {
+    icon: ./icons/github/merge.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  commit: Commit {
+    icon: ./icons/github/commit.svg
+    shape: image
+    width: 30
+    height: 50
+  }
+
+  branch -> commit
+  commit -> pr: vulnerability scan
+  pr -> merge: code review
+  merge -> branch
+}
+
+gcp: "" {
+  direction: right
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  gcpicon: "" {
+    icon: ./icons/gcp/logo-text.svg
+    width: 300
+    shape: image
+  }
+
+  scc: Security Command Center {
+    icon: ./icons/gcp/security_command_center.svg
+    style: {
+      stroke: "#808080"
+      fill: "#ffffff"
+    }
+  }
+
+  project: Infrastructure Provisioning Project {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+
+    vpc: Default VPC Network 10.1.0.0/16 {
+      style: {
+        stroke: blue
+        font-color: blue
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+
+        cloudsource: Cloud Source Repositories mirror {
+          icon: ./icons/gcp/cloud-source-repositories.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+
+        configsync: Google Managed SaaS ConfigSync {
+          icon: ./icons/gcp/anthos_config_management.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+        }
+      }
+    }
+  }
+
+  experimentationfolder: Experimentation Folder {
+    style: {
+      stroke: "#ffffff"
+      fill: "#fef7e0"
+    }
+
+    exproj: Project A experimentation {
+      icon: ./icons/general/suitcase.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+  }
+
+  productionfolder: Production Folder {
+    style: {
+      stroke: "#ffffff"
+      fill: "#fef7e0"
+    }
+
+    prodproj: Project A production {
+      icon: ./icons/general/suitcase.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+  }
+}
+
+gcp.project.vpc.fw.configsync -> gcp.project.vpc.fw.cloudsource
+gcp.project.vpc.fw.cloudsource -> gh: GitHub mirrors
+gcp.project.vpc.fw.configsync -> gcp.experimentationfolder.exproj: Managed Project
+gcp.project.vpc.fw.configsync -> gcp.productionfolder.prodproj: Managed Project
+gcp.project -> gcp.scc: logs/events
+gcp.productionfolder.prodproj -> gcp.scc: logs/events
+gcp.experimentationfolder.exproj -> gcp.scc: logs/events
+
+explanation: |md
+  # DMIA Infrastructure Provisioning
+
+  This architecture uses a single priviledged account to provision infrastructure.
+
+  This allows DMIA staff to operate with lower priviledged accounts while offering a self-service model to users via GitHub Pull Requests.
+
+  This account is used to create:
+  - A GCP project inside our experimentation/production folders
+  - A budget for the project
+  - An initial set of IAM users who can access the project
+
+  Each project comes with it's own VPC network and firewall rules. Expermentation and production folders enforce different policies.
+
+  All logs in all projects are aggregated in Security Command Center.
+
+  Minor changes will allow this service to provision resources in AWS and Azure as well as resources defined with Terraform.
+
+  Work underway to allow users to provision resources and change permissions via Slack.
+| {
+  near: gcp.gcpicon
+}
