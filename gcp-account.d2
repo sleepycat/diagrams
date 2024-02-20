@@ -1,0 +1,141 @@
+direction: right
+
+orgadmins: DTB Org Admins {
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  shape: image
+}
+
+dpi: DMIA Cloud Team {
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  shape: image
+}
+
+projectteam1: Project team 1 {
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  shape: image
+}
+
+projectteam2: Project team 2 {
+  icon: https://icons.terrastruct.com/essentials%2F359-users.svg
+  shape: image
+}
+
+gcp: DTB Google Cloud Account {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  org: Shared Organization {
+    style: {
+      stroke: "#ffffff"
+      fill: "#eeebea"
+    }
+
+    folders: Folders (contain/organize projects) {
+      style: {
+        stroke: "#ffffff"
+        fill: "#fef7e0"
+      }
+
+      dmiafolder: DMIA folder RBAC boundary {
+        icon: ./icons/general/folder.svg
+        style: {
+          stroke: "#808080"
+          fill: "#ffffff"
+        }
+
+        dmiaproject1: DMIA Project 1 RBAC boundary {
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+
+          vpc: Default VPC Network 10.1.0.0/16 {
+            style: {
+              stroke: blue
+              font-color: blue
+              stroke-dash: 3
+              fill: transparent
+            }
+
+            fw: Firewall {
+              style: {
+                stroke: black
+                font-color: black
+                stroke-dash: 3
+                fill: transparent
+              }
+
+              resource: Project resources {
+                icon: ./icons/gcp/vertexai.svg
+                style: {
+                  stroke: "#808080"
+                  fill: "#ffffff"
+                }
+              }
+            }
+          }
+        }
+
+        dmiaproject2: DMIA Project 2 RBAC boundary {
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+
+          vpc: Default VPC Network 10.1.0.0/16 {
+            style: {
+              stroke: blue
+              font-color: blue
+              stroke-dash: 3
+              fill: transparent
+            }
+
+            fw: Firewall {
+              style: {
+                stroke: black
+                font-color: black
+                stroke-dash: 3
+                fill: transparent
+              }
+
+              resource: Project resources {
+                icon: ./icons/gcp/cloud_run.svg
+                style: {
+                  stroke: "#808080"
+                  fill: "#ffffff"
+                }
+              }
+            }
+          }
+        }
+      }
+
+      dtbfolder: DTB folder {
+        icon: ./icons/general/folder.svg
+        style: {
+          stroke: "#808080"
+          fill: "#ffffff"
+        }
+      }
+    }
+
+    scc: Security Command Center {
+      icon: ./icons/gcp/security_command_center.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+  }
+}
+
+orgadmins -> gcp.org: manages
+orgadmins -> gcp.org.scc: monitors
+dpi -> gcp.org.folders.dmiafolder: manages (from HC devices)
+projectteam1 -> gcp.org.folders.dmiafolder.dmiaproject1: manages
+projectteam2 -> gcp.org.folders.dmiafolder.dmiaproject2: manages
+
+gcp.org.folders.dmiafolder -> gcp.org.scc: all security logs/events visible in SCC
+gcp.org.folders.dtbfolder -> gcp.org.scc: all security logs/events visible in SCC
