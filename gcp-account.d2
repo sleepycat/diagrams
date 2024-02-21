@@ -1,23 +1,42 @@
 direction: right
 
+gcp.org.style: {
+  font-size: 30
+}
+gcp.org.**.style: {
+  font-size: 25
+}
+
 orgadmins: DTB Org Admins {
   icon: https://icons.terrastruct.com/essentials%2F359-users.svg
   shape: image
+  style: {
+    font-size: 25
+  }
 }
 
 dpi: DMIA Cloud Team {
   icon: https://icons.terrastruct.com/essentials%2F359-users.svg
   shape: image
+  style: {
+    font-size: 25
+  }
 }
 
 projectteam1: Project team 1 {
   icon: https://icons.terrastruct.com/essentials%2F359-users.svg
   shape: image
+  style: {
+    font-size: 25
+  }
 }
 
 projectteam2: Project team 2 {
   icon: https://icons.terrastruct.com/essentials%2F359-users.svg
   shape: image
+  style: {
+    font-size: 25
+  }
 }
 
 gcp: DTB Google Cloud Account {
@@ -122,7 +141,7 @@ gcp: DTB Google Cloud Account {
     }
 
     scc: Security Command Center {
-      icon: ./icons/gcp/security_command_center.svg
+      icon: https://upload.wikimedia.org/wikipedia/commons/1/19/Google_Security_Command_Center.svg
       style: {
         stroke: "#808080"
         fill: "#ffffff"
@@ -131,11 +150,23 @@ gcp: DTB Google Cloud Account {
   }
 }
 
-orgadmins -> gcp.org: manages
+orgadmins -> gcp.org: manages {
+  style: {font-size: 25}
+}
 orgadmins -> gcp.org.scc: monitors
-dpi -> gcp.org.folders.dmiafolder: manages (from HC devices)
-projectteam1 -> gcp.org.folders.dmiafolder.dmiaproject1: manages
-projectteam2 -> gcp.org.folders.dmiafolder.dmiaproject2: manages
+dpi -> gcp.org.folders.dmiafolder: manages (from HC devices) {
+  style: {font-size: 25}
+}
+projectteam1 -> gcp.org.folders.dmiafolder.dmiaproject1: manages {
+  style: {font-size: 25}
+}
+projectteam2 -> gcp.org.folders.dmiafolder.dmiaproject2: manages {
+  style: {font-size: 25}
+}
 
-gcp.org.folders.dmiafolder -> gcp.org.scc: all security logs/events visible in SCC
-gcp.org.folders.dtbfolder -> gcp.org.scc: all security logs/events visible in SCC
+gcp.org.folders.dmiafolder -> gcp.org.scc: all security logs/events visible in SCC {
+  style: {font-size: 25}
+}
+gcp.org.folders.dtbfolder -> gcp.org.scc: all security logs/events visible in SCC {
+  style: {font-size: 25}
+}
