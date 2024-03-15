@@ -1,0 +1,112 @@
+direction: right
+
+text: |md
+  # DHIS2 system boundary
+  ## date: 14-03-2024
+| {near: top-left}
+
+internet: The Internet {
+  icon: https://upload.wikimedia.org/wikipedia/commons/5/57/OpenMoji-black_2601.svg
+  shape: image
+}
+
+users: DHIS2 Administrators {
+  icon: https://upload.wikimedia.org/wikipedia/commons/f/f1/Toicon-icon-feather-study.svg
+  shape: image
+}
+
+gcp: "DTB Google Cloud" {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+  gcpicon: "" {
+    icon: https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg
+    width: 300
+    shape: image
+  }
+
+  hc: HC folder {
+    project2: HC project1 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+    }
+    project3: HC project2 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+    }
+  }
+
+  dmia: DMIA folder {
+    authbounds: Authorization boundary {
+      style: {
+        stroke: "#ff0000"
+      }
+
+      project: DHIS2 Project RBAC boundary {
+        style: {
+          stroke: "#ffffff"
+          fill: "#e1f6fe"
+        }
+
+        vpc: Default VPC Network 10.1.0.0/16 {
+          style: {
+            stroke: blue
+            font-color: blue
+            stroke-dash: 3
+            fill: transparent
+          }
+
+          fw: "Firewall: open ports 80 (redirect), 443" {
+            style: {
+              stroke: black
+              font-color: black
+              stroke-dash: 3
+              fill: transparent
+            }
+
+            k8s: Google Managed PaaS/GKE Autopilot {
+              style: {
+                stroke: blue
+                font-color: blue
+                fill: transparent
+              }
+
+              ingress: Google Managed Ingress
+
+              dhis2: "" {
+                icon: https://dhis2.org/wp-content/uploads/dhis2-logo-rgb-positive.svg
+              }
+              pg: PostgreSQL Database Cluster {
+                icon: https://cloudnative-pg.io/images/hero_image.svg
+              }
+
+              ingress -> dhis2: mtls
+              dhis2 -> pg: mtls
+            }
+          }
+        }
+      }
+    }
+    project2: DMIA project2 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+    }
+    project3: DMIA project3 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+    }
+  }
+}
+
+internet -> gcp.dmia.authbounds.project.vpc.fw.k8s.ingress: TLS 1.3
+users -> gcp.dmia.authbounds.project.vpc.fw.k8s.ingress: TLS 1.3
+
