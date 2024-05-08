@@ -1,0 +1,159 @@
+grid-columns: 3
+
+text: |md
+  # Why PHAC-specific architecture?
+  * The OAG identified gaps in PHAC infrastructure for more than 10 years
+  * The Surveillance Strategy for 2013-2016 and 2016-2019 identified a need for improved IT infrastructure
+  * Despite some work being done, this initiative was never completed
+  ## PHAC Business Context
+  Technical architecture must align with: 
+  * Surveillance teams are "data stewards" not "data owners" (Caring for other peoples data)
+  * Data sharing agreements (DSAs): linking/joining forbidden, often storage in cloud not allowed
+  * Response mandate: move fast and collaborate externally
+  * Interoperability for "timely data sharing" (DSAs, and existing hub-and-spoke networks a barrier)
+  * Parliament and data owners (provinces) concerned by centralized solutions
+  * Large population of power users
+  ## DMIA architecture: Data Mesh
+  * Surveillance teams as "data products"
+  * Initial focus internal: Lay groundwork for interoperability with cloud tools, find and raise DSA issues. 
+  * Mesh emerges from eventual interconnection _after_ interoperability work
+  ## Technical implementation
+  * Leverage GCPs native "project" boundaries for security segmentation
+    * Avoids building our own security boundaries
+    * Enables FinOps using native tools
+    * Provides proven isolation primitives
+  * "one application per project"
+    * Project ownership aligns with PHACs data stewardship model
+    * "Shared-nothing" architecture:
+      * Required to allow power-users latitude needed for response work
+      * Segmentation/Isolation reduces org impact of compromise (lowers risk)
+      * Profile 2/3 only: No interconnection with HC on-prem (lowers risk)
+      * Enables easy visibility into Total Cost of Owership
+      * Security tailored to technologies and business needs of project 
+      * Usage based billing eliminates benefits of shared (security) infrastructure
+    * Reduced risk and clear "blast radius" enables response mandate:
+      * Allows autonomy for data science power-users/response use cases
+      * Allows for rapid risk decisions
+      * Enables external collaboration (WHO, provinces)
+    * creates zero-trust compatible "zones of one" to align with CDC
+  * Cloud focus:
+    * Focus on enabling direct access to SaaS services targeted at data scientists
+    * Use PaaS services for web hosting to increase security and availability at low cost
+    * Avoid traditonal IaaS services ("legacy cloud")
+|
+
+users: "" {
+  grid-columns: 1
+  style: {
+    opacity: 0
+  }
+
+  external: "approved collaborators" {
+    icon: https://upload.wikimedia.org/wikipedia/commons/5/57/OpenMoji-black_2601.svg
+    shape: image
+  }
+
+  team1: epi team 1 {
+    icon: https://upload.wikimedia.org/wikipedia/commons/f/f1/Toicon-icon-feather-study.svg
+    shape: image
+  }
+  team2: epi team 2 {
+    icon: https://upload.wikimedia.org/wikipedia/commons/a/a8/Toicon-icon-stone-study.svg
+    shape: image
+  }
+}
+
+gcp: "DTB Google Cloud" {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  grid-columns: 2
+
+  dmia: DMIA folder {
+    grid-rows: 3
+    project: Project 1 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+
+      vpc: Isolated VPC Network 10.1.0.0/16 {
+        style: {
+          stroke: blue
+          font-color: blue
+          stroke-dash: 3
+          fill: transparent
+        }
+        resources: Project SaaS/PaaS resources
+      }
+    }
+    project2: Project 2 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+      vpc: Isolated VPC Network 10.1.0.0/16 {
+        style: {
+          stroke: blue
+          font-color: blue
+          stroke-dash: 3
+          fill: transparent
+        }
+        resources: Project SaaS/PaaS resources
+      }
+    }
+    project3: Project n+1 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+      vpc: Isolated VPC Network 10.1.0.0/16 {
+        style: {
+          stroke: blue
+          font-color: blue
+          stroke-dash: 3
+          fill: transparent
+        }
+        resources: Project SaaS/PaaS resources
+      }
+    }
+  }
+
+  gcpicon: "" {
+    icon: https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg
+    width: 400
+    shape: image
+  }
+  hc: HC folder {
+    grid-rows: 2
+    project2: HC project1 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+    }
+    project3: HC project2 RBAC boundary {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+    }
+  }
+}
+
+onprem: "HC on-prem" {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+}
+
+users.external -> gcp.dmia.project: https
+users.team1 -> gcp.dmia.project: https
+users.team2 -> gcp.dmia.project2: https
+gcp.dmia.project <-> gcp.dmia.project2: ❌ no interconnection
+gcp.dmia.project2 <-> gcp.dmia.project3: ❌ no interconnection
+gcp.dmia <-> gcp.hc: ❌
+gcp.dmia <-> onprem: ❌ no interconnection
