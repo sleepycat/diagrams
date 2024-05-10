@@ -161,12 +161,26 @@ internet -> gcp.project.vpc.fw.k8s.ingress: https
 gcp.project.vpc.fw.k8s.flux -> gh: Pull based deployment via https
 gcp.project.vpc.fw.k8s -> gcp.project.vpc.fw.registry: Pull images via https
 letsencrypt <- gcp.project.vpc.fw.k8s.certmanager: ACME
-gcp.project.vpc.fw.clouddns <-> gcp.project.vpc.fw.k8s.certmanager: {
-  label: |md
-    least priviledge 
-    service account 
-    via https
-  |
-}
+gcp.project.vpc.fw.clouddns <-> gcp.project.vpc.fw.k8s.certmanager: Least privilege service account
 gcp.project.vpc.fw.clouddns <- letsencrypt: ACME
 gcp.project -> gcp.scc: All project logs/events visible in Security Command Center
+
+explanation: |md
+  # Data Sharing Project
+  PHAC's core business is data aggregation and analysis.
+
+  Data arrives in dangerous formats from untrusted sources increasingly targeted by ransomware gangs.
+
+  Architectural choices can contain the spread of compromise just as vaccines contain the spread of disease. 
+
+  - risk = likelihood * impact
+    - Highly segmented architecture reduces impact/spread of compromise.
+    - Technology selection and rapid updates reduces likelihood.
+  - Continual security scanning at multiple levels to prompt updates.
+    - Codesql source code scanning
+    - Dependabot dependency scanning
+    - Secrets scanning
+    - Container security scanning
+| {
+  near: gcp
+}
