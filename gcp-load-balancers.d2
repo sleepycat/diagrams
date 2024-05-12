@@ -1,0 +1,198 @@
+grid-columns: 2
+
+components: {
+  grid-rows: 8
+
+  forwardingRule: |md
+      # Forwarding Rules
+
+      Frontend Configuration
+
+      IP Address & Port: This is the public IP and port combination that the load balancer listens to for incoming traffic. 
+      It can be a global or regional IP address.
+
+      Protocol: Specifies the type of traffic, such as HTTP, HTTPS, TCP, or UDP, that the load balancer will accept.
+      ## CLI
+      ```
+      gcloud compute forwarding-rules create http-content-rule \
+        --global \
+        --target-http-proxy my-http-proxy \
+        --ports 80
+
+      # or
+      
+      gcloud compute forwarding-rules create [LOAD_BALANCER_NAME] \
+    --project=[PROJECT_ID] \
+    --region=[REGION] \
+    --target-pool=[TARGET_POOL_NAME] \
+    --ports=[PORTS] \
+    --address=[ADDRESS]
+      ```
+  |
+
+  backend: |md
+    # Backend
+
+    Backend Services (or Backend Buckets for HTTP/S Load Balancer): A backend service or bucket defines how the load balancer distributes traffic to the backend instances.
+
+    It also contains settings like session affinity, load balancing scheme, and connection draining.
+
+    Instance Groups / Network Endpoint Groups: Backend instances or endpoints receive traffic from the load balancer. 
+
+    They can be managed or unmanaged instance groups or network endpoint groups (NEG), depending on the load balancer type.
+    ## CLI
+    ```
+    gcloud compute backend-services create web-backend-service \
+      --load-balancing-scheme=EXTERNAL \
+      --protocol=HTTP \
+      --port-name=http \
+      --health-checks=http-basic-check \
+      --global
+    ```
+  |
+
+  urlmap: |md
+    # URL map
+    ## CLI
+    ```
+    gcloud compute url-maps create web-map-http \
+      --default-service web-backend-service
+    ```
+  |
+
+  healthchecks: |md
+    # Health Checks
+      
+    Health checks verify the health of backend instances. If an instance fails a health check, the load balancer stops sending traffic to that instance until it passes health checks again.
+
+    ## CLI
+    ```
+    gcloud compute health-checks create http http-basic-check \
+        --port 80
+    ```
+  |
+
+  ipaddress: |md
+    # IP address
+      
+    An IP v4 or v6 address
+
+    ## CLI
+    ```
+    gcloud compute addresses create lb-ipv4-1 \
+      --ip-version=IPV4 \
+      --network-tier=PREMIUM \
+      --global
+    ```
+  |
+
+  neg: |md
+      # Network Endpoint Group
+        
+      A Network Endpoint Group (NEG) is a collection of network endpoints that can be managed as a unit and used as a backend target for Google Cloud load balancers. 
+      
+      NEGs provide finer control over how traffic is distributed and enable support for non-standard or external services. 
+      
+      They are primarily used with HTTP(S) load balancers but can also work with other Google Cloud load balancer types.
+
+      Zonal NEG
+      GCE & GKE backends
+    Internet NEG
+      External backends
+    Private Service Connect NEG
+    Serverless NEG
+      Cloud Run
+    Hybrid connectivity NEG
+      Backends on prem or other clouds
+
+      ## CLI
+      ```
+      gcloud compute addresses create lb-ipv4-1 \
+        --ip-version=IPV4 \
+        --network-tier=PREMIUM \
+        --global
+      ```
+  |
+}
+
+gcp: "" {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+  gcpicon: "" {
+    icon: https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg
+    width: 300
+    shape: image
+  }
+  vpc: {
+    style: {
+      stroke: "#ffffff"
+      fill: "#e1f6fe"
+    }
+    region: {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e5f2ec"
+      }
+      ipaddress: Regional forwarding rule IPaddress {
+        style: {
+          double-border: true
+          stroke: "#f5d3d0"
+          fill: "#ffffff"
+        }
+      }
+
+      regionalbackend: Regional Backend Service {
+        style: {
+          stroke: "#e7e7e7"
+          fill: "#ffffff"
+        }
+      }
+      regionalhealthcheck: Regional Health Check {
+        style: {
+          stroke: "#e7e7e7"
+          fill: "#ffffff"
+        }
+      }
+
+      targetProxy: Target Proxy {
+        style: {
+          stroke: "#e7e7e7"
+          fill: "#ffffff"
+        }
+      }
+      neg: Network Endpoint Group {
+        style: {
+          stroke: "#e7e7e7"
+          fill: "#ffffff"
+        }
+      }
+
+      urlmap: URL Map {
+        style: {
+          stroke: "#e7e7e7"
+          fill: "#ffffff"
+        }
+      }
+
+      ipaddress -> targetProxy: {
+        style: {stroke: "#7a7d7b"}
+      }
+      targetProxy -> urlmap: {
+        style: {stroke: "#7a7d7b"}
+      }
+      urlmap -> regionalbackend: {
+        style: {stroke: "#7a7d7b"}
+      }
+      regionalbackend -> neg: {
+        style: {stroke: "#7a7d7b"}
+      }
+
+      regionalhealthcheck -> regionalbackend: {
+        style: {stroke: "#7a7d7b"}
+      }
+    }
+  }
+}
+
