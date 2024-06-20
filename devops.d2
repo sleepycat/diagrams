@@ -1,0 +1,129 @@
+grid-rows: 3
+
+# CI/CD combined: pipeline builds a deployable artifact and deploys it
+push: "Push Model" {
+  GitHub -> GCP: build and push from pipeline
+}
+
+# https://faun.pub/pull-based-cd-pipelines-for-security-4e044b403f56
+# CI split from CD: 
+# CI pipeline builds a deployable artifact and pushes it to registry where it is scanned
+# CD process pulls new artifacts and deploys them
+pull: "Pull Model" {
+  grid-columns: 2
+
+  gh: GitHub {
+    icon: ./icons/github/logo.svg
+    style: {
+      stroke: "#000000"
+      fill: "#f1f3f4"
+    }
+  }
+
+  gcp: "" {
+    style: {
+      stroke: "#000000"
+      fill: "#f1f3f4"
+    }
+
+    scc: Security Command Center {
+      icon: ./icons/gcp/security_command_center.svg
+      style: {
+        stroke: "#808080"
+        fill: "#ffffff"
+      }
+    }
+
+    project: GCP Project RBAC boundary (Cloud Profile 3 only) {
+      style: {
+        stroke: "#ffffff"
+        fill: "#e1f6fe"
+      }
+
+      vpc: Default VPC Network 10.1.0.0/16 {
+        style: {
+          stroke: blue
+          font-color: blue
+          stroke-dash: 3
+          fill: transparent
+        }
+
+        fw: Firewall {
+          style: {
+            stroke: black
+            font-color: black
+            stroke-dash: 3
+            fill: transparent
+          }
+
+          cloudbuild: Cloud Build {
+            icon: ./icons/gcp/cloud_build.svg
+            style: {
+              stroke: "#808080"
+              fill: "#ffffff"
+            }
+          }
+
+          registry: Artifact Registry {
+            icon: ./icons/gcp/artifact_registry.svg
+            style: {
+              stroke: "#808080"
+              fill: "#ffffff"
+            }
+          }
+
+          k8s: Google Managed PaaS/GKE Autopilot {
+            style: {
+              stroke: blue
+              font-color: blue
+              fill: transparent
+            }
+
+            container: Low attack surface container {
+              style: {
+                stroke: black
+                font-color: black
+                fill: transparent
+              }
+
+              django: Django App {
+                icon: ./icons/django/logo.svg
+                shape: image
+              }
+            }
+
+            k8s: "" {
+              icon: ./icons/kubernetes/logo.svg
+              width: 150
+              shape: image
+            }
+            flux: GitOps operator {
+              icon: ./icons/flux/logo.svg
+              shape: image
+            }
+          }
+        }
+      }
+    }
+    gcpicon: "" {
+      icon: ./icons/gcp/logo-text.svg
+      width: 150
+      shape: image
+    }
+  }
+  gh -> gcp.project.vpc.fw.cloudbuild: transmits repo events via https
+  gcp.project.vpc.fw.k8s.flux -> gh: pull config via ssh
+  gcp.project.vpc.fw.k8s.flux -> gh: commit new version numbers via ssh
+  gcp.project.vpc.fw.k8s.flux -> gcp.project.vpc.fw.k8s.k8s: apply config to k8s
+  gcp.project.vpc.fw.k8s.k8s -> gcp.project.vpc.fw.registry: pull images via https
+  gcp.project.vpc.fw.k8s.flux -> gcp.project.vpc.fw.registry: monitor for new images
+
+  gcp.project.vpc.fw.cloudbuild -> gcp.project.vpc.fw.registry: Push images via https
+  gcp.project -> gcp.scc: All project logs/events visible in Security Command Center
+}
+
+# https://github.blog/2023-01-11-passwordless-deployments-to-the-cloud/
+# ??? Combined CI/CD but with no passwords?
+passwordless: "Passwordless Push Model" {
+  GitHub -> GCP: passwordless push from GitHub
+}
