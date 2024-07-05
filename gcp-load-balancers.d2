@@ -53,10 +53,24 @@ components: {
 
   urlmap: |md
     # URL map
+    Maps incoming requests based on URL paths to the appropriate backend service.
+
+    They are designed to be added to incrementally so they have multiple commands.
     ## CLI
     ```
     gcloud compute url-maps create web-map-http \
       --default-service web-backend-service
+    # or
+    gcloud compute url-maps create URL_MAP_NAME \
+      --default-backend-bucket=BACKEND_BUCKET_NAME
+    # then
+    gcloud compute url-maps add-path-matcher MY-URL-MAP \
+      --path-matcher-name=MY-MATCHER \
+      --default-service=MY-DEFAULT-SERVICE \
+      --backend-service-path-rules='/search/*=search_service,/images/*\=images-service' \
+      --backend-bucket-path-rules='/static/*=static-bucket' \
+      --new-hosts=example.com '*.example.com'
+
     ```
   |
 
@@ -87,28 +101,24 @@ components: {
   |
 
   neg: |md
-      # Network Endpoint Group
-        
-      A Network Endpoint Group (NEG) is a collection of network endpoints that can be managed as a unit and used as a backend target for Google Cloud load balancers. 
+    # Network Endpoint Group
       
-      NEGs provide finer control over how traffic is distributed and enable support for non-standard or external services. 
-      
-      They are primarily used with HTTP(S) load balancers but can also work with other Google Cloud load balancer types.
+    A Network Endpoint Group (NEG) is a collection of network endpoints that can be managed as a unit and used as a backend target for Google Cloud load balancers. 
 
-      Zonal NEG
-      GCE & GKE backends
-    Internet NEG
-      External backends
-    Private Service Connect NEG
-    Serverless NEG
-      Cloud Run
-    Hybrid connectivity NEG
-      Backends on prem or other clouds
+    NEGs provide finer control over how traffic is distributed and enable support for non-standard or external services. 
 
-      ## CLI
-      ```
-      gcloud compute network-endpoint-groups create my-neg --zone=us-central1-a --network=my-network --subnet=my-subnetwork
-      ```
+    They are primarily used with HTTP(S) load balancers but can also work with other Google Cloud load balancer types.
+
+    * Zonal NEG (GCE & GKE backends)
+    * Internet NEG (External backends)
+    * Private Service Connect NEG
+    * Serverless NEG (Cloud Run)
+    * Hybrid connectivity NEG (Backends on-prem or other clouds)
+
+    ## CLI
+    ```
+    gcloud compute network-endpoint-groups create my-neg --zone=us-central1-a --network=my-network --subnet=my-subnetwork
+    ```
   |
 }
 
@@ -192,4 +202,3 @@ gcp: "" {
     }
   }
 }
-
