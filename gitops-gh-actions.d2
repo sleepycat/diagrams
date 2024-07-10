@@ -1,0 +1,74 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    # Terminal theme code
+    theme-id: 300
+  }
+}
+
+pull_model: Pull Based Model with GitHub Actions {
+  shape: sequence_diagram
+
+  k8s: Kubernetes {
+    shape: image
+    icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FCompute%2FKubetnetes%20Engine.svg
+  }
+
+  flux: Flux {
+    shape: image
+    icon: https://raw.githubusercontent.com/sleepycat/diagrams/main/icons/flux/logo.svg
+  }
+
+  registry: GitHub Container Registry {
+    shape: image
+    icon: https://icons.terrastruct.com/dev%2Fgithub.svg
+  }
+
+  actions: GitHub Actions {
+    shape: image
+    icon: https://icons.terrastruct.com/dev%2Fgithub.svg
+  }
+  github: GitHub repo {
+    shape: image
+    icon: https://icons.terrastruct.com/dev%2Fgithub.svg
+  }
+  ci: CI {
+    actions <- github: Trigger build via https webhooks
+    actions -> github: Pull new changes to build container
+    actions -> actions: Build new image
+    actions -> registry: Tag and push new image to registry
+  }
+  cd: CD {
+    flux -> registry: Polls registry for images a configurable interval
+    flux -> github: Commit new image tag back to config
+    flux -> github: Pull specified branch on configurable interval
+    k8s <- flux: apply config from GitHub repo
+    k8s -> registry: Pull images specified in config
+    k8s -> k8s: run containers specified in config
+  }
+}
+
+explanation: |md
+  # GitOps Pull Based Deployment
+  This model splits CI from CD for security and speed.
+  * System is always in a known state
+  * Deviations from that state are automatically reverted
+  * All changes to system state are:
+    * captured in git
+    * immutable
+    * auditable
+    * attributable
+  * CI
+    * Runs tests
+    * builds OCI image for each change
+    * places OCI image in registry for scanning
+  * Registry
+    * Contains all project images
+    * Scans recent images
+    * Old images allow rollback
+  * CD
+    * Cluster reaches out
+    * No external service reaches in
+    * No credentials externally
+| {near: center-left}
+
