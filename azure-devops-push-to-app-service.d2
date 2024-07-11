@@ -1,0 +1,50 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    # Terminal theme code
+    theme-id: 300
+  }
+}
+
+pushmodel: Push based model: Azure Devops to App Service {
+  shape: sequence_diagram
+
+  appservice: Azure App Service
+
+  fw: Firewall {
+    shape: image
+    icon: https://icons.terrastruct.com/azure%2FNetworking%20Service%20Color%2FAzure%20Firewall.svg
+  }
+  activedirectory: Active Directory
+
+  pipelines: Hosted Agents {
+    shape: image
+    icon: https://icons.terrastruct.com/azure%2FDevOps%20Service%20Color%2FAzure%20Pipelines.svg
+  }
+
+  # ADO stores tokens like SSH keys in a US data center no matter what data residency settings you choose?
+  # https://learn.microsoft.com/en-us/azure/devops/organizations/security/data-location?view=azure-devops#token-data
+  #
+  # ADO needs access to your tenant via the public internet and requires IP whitelisting to allow agents through your firewall?
+  # https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops&tabs=yaml#networking
+  #
+  # ADO uses oidc identity federation to auth to access your tenant?
+  # https://devblogs.microsoft.com/devops/introduction-to-azure-devops-workload-identity-federation-oidc-with-terraform/
+  ado: dev.azure.com/orgname {
+    shape: image
+    icon: https://icons.terrastruct.com/azure%2FDevOps%20Service%20Color%2FAzure%20DevOps.svg
+  }
+
+  ado -> activedirectory: auth?
+  activedirectory -> ado: OK I guess?
+  ado -> pipelines: run jobs?
+  pipelines -> appservice: deploy a .NET thing?
+}
+
+explanation: |md
+  # Push based deployment
+  This model uses pipelines to deploy applications after building them
+
+
+| {near: center-left}
+
