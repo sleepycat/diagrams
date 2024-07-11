@@ -39,12 +39,18 @@ pull_model: Pull Based Model with Cloudbuild {
     cloudbuild -> registry: Add sortable tag & push new image to registry
   }
   cd: CD {
-    flux -> registry: Polls registry for images a configurable interval
-    flux -> github: Sorts and commit new image tag back to config
-    flux -> github: Pull specified branch on configurable interval
-    k8s <- flux: apply config from GitHub repo
-    k8s -> registry: Pull images specified in config
-    k8s -> k8s: run containers specified in config
+    imageupdates: 🗘 Flux image update loop {
+      flux -> registry: Polls registry for images on configurable interval
+      flux -> github: Sorts and commits new image tag back to config
+    }
+    deployment: 🗘 Flux deployment loop {
+      flux -> github: Pull config on configurable interval
+      k8s <- flux: apply config
+    }
+    kubernetes: 🗘 Kubernetes reconciliation loop {
+      k8s -> registry: Pull images specified in config
+      k8s -> k8s: run containers specified in config
+    }
   }
 }
 
@@ -53,6 +59,8 @@ explanation: |md
   This model splits CI from CD for security and speed.
 
   Security scanning moves to repo and registry for continuous scanning<br/> (not only when CI pipelines run)
+
+  Registry stores and scans images. Previous images provide rollback capability. 
 
   CI narrowly focused on building artifacts. Developers maintain pipelines.
 
