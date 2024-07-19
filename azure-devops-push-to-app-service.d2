@@ -9,13 +9,22 @@ vars: {
 pushmodel: Push based model: Azure Devops to App Service {
   shape: sequence_diagram
 
-  appservice: Azure App Service
-
+  appservice: App Service {
+    shape: image
+    icon: https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Services.svg
+  }
+  acr: Container Registry {
+    shape: image
+    icon: https://icons.terrastruct.com/azure%2FContainer%20Service%20Color%2FContainer%20Registries.svg
+  }
   fw: Firewall {
     shape: image
     icon: https://icons.terrastruct.com/azure%2FNetworking%20Service%20Color%2FAzure%20Firewall.svg
   }
-  activedirectory: Active Directory
+  activedirectory: Active Directory {
+    shape: image
+    icon: https://icons.terrastruct.com/azure%2FIdentity%20Service%20Color%2FActive%20Directory.svg
+  }
 
   pipelines: Hosted Agents {
     shape: image
@@ -26,6 +35,7 @@ pushmodel: Push based model: Azure Devops to App Service {
   # https://learn.microsoft.com/en-us/azure/devops/organizations/security/data-location?view=azure-devops#token-data
   #
   # ADO needs access to your tenant via the public internet and requires IP whitelisting to allow agents through your firewall?
+  # "This may increase your exposure as the range of IP addresses is rather large and since machines in this range can belong to other customers as well."
   # https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops&tabs=yaml#networking
   #
   # ADO uses oidc identity federation to auth to access your tenant?
@@ -34,17 +44,22 @@ pushmodel: Push based model: Azure Devops to App Service {
     shape: image
     icon: https://icons.terrastruct.com/azure%2FDevOps%20Service%20Color%2FAzure%20DevOps.svg
   }
-
-  ado -> activedirectory: auth?
-  activedirectory -> ado: OK I guess?
-  ado -> pipelines: run jobs?
-  pipelines -> appservice: deploy a .NET thing?
+  activedirectory -> activedirectory: App registration allowing DevOps authentication
+  fw -> fw: open ports to Azure IP ranges
+  ado -> activedirectory: auth with OIDC
+  activedirectory -> ado: auth success
+  ado -> pipelines: build OCI image
+  pipelines -> acr: Push image to ACR
+  pipelines -> appservice: prompt redeploy
+  appservice -> appservice: Pull and run new image
 }
 
 explanation: |md
   # Push based deployment
-  This model uses pipelines to deploy applications after building them
+  Model for deploying Django apps in Azure.
 
+  Team interactions: 
+    * Firewall team to allow hosted agent IP range
+    * M365 team creates Azure app registration
 
 | {near: center-left}
-
