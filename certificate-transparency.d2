@@ -1,0 +1,23 @@
+# https://educatedguesswork.org/posts/transparency-part-1/
+# https://educatedguesswork.org/posts/transparency-part-2/
+# https://github.com/GoogleChrome/CertificateTransparency
+# Opt in SCT auditing:
+# https://docs.google.com/document/d/1G1Jy8LJgSqJ-B673GnTYIG4b7XRw2ZLtvvSlrqFcl4A/edit?tab=t.0#heading=h.7nki9mck5t64
+# Notes about disabling CT checking for internal sites: 
+# https://www.idmanagement.gov/implement/announcements/03_google_ct/
+ct: Certificate Transparency {
+  shape: sequence_diagram
+  Certificate Transparency Log
+  chrome: Chrome {
+    shape: image
+    icon: https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg
+    height: 40
+  }
+  dns: DNS
+  server
+
+  chrome -> dns: DNS lookup example.com
+  dns -> chrome: ip address
+  chrome -> server: tls handshake
+}
+
