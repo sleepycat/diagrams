@@ -1,0 +1,74 @@
+# There are 5 ACME CAs. None of which are in Canada.
+# Without ACME support, certs must be issued and updated manually.
+# https://acmeclients.com/certificate-authorities/
+#
+# Certificate automation is critical both for security and because of the toil and downtime involved with manual certificate management.
+# The CA forum will be reducing the maximum certificate validity time down to 45 days, ratcheting up the pain on the automation holdouts.
+# https://github.com/cabforum/servercert/pull/553
+#
+# Companies are struggling with shorter cert lifetimes.
+# https://www.cyberark.com/resources/white-papers/organizations-largely-unprepared-for-the-advent-of-90-day-tls-certificates
+#
+#
+# Risk: DNS forgery attacks against the ACME server can
+# result in the server making incorrect decisions about domain control
+# and thus mis-issuing certificates.
+# https://datatracker.ietf.org/doc/html/rfc8555#section-11.2
+# Mitigation: it is RECOMMENDED that ACME-based CAs make all DNS
+# queries via DNSSEC-validating stub or recursive resolvers.  This
+# provides additional protection to domains that choose to make use of
+# DNSSEC.
+# Risk: BGP hacking.
+# Mitigation: Multi-vantage point validation
+#
+# Communications between client and the Web Front End (WFE) are described in RFC 8555
+# https://datatracker.ietf.org/doc/html/rfc8555#section-11.2
+certissuance: Let's Encrypt certificate issuance flow {
+  shape: sequence_diagram
+  # For simplicity, "client" is imagined as a Caddy server running on example.com
+  # Caddy's acts as both an ACME client and the domain's web server.
+  client: caddy server @ example.com {
+    shape: image
+    icon: https://caddyserver.com/resources/images/logo-light.svg
+    height: 25
+  }
+  wfe: Web Front End
+  ra: Registration Authority
+  va: Validation Authority
+  va1: Remote Validation Authority 1
+  va2: Remote Validation Authority 2
+
+  # create account
+  accountCreation: Account Creation {
+    client -> wfe: POST newAccount
+    wfe -> client: account details
+  }
+  order: Order submission {
+    client -> wfe: POST /acme/new-order includes identifiers (domains)
+    wfe -> ra: grpc:NewRegistration
+    ra -> wfe: grpc:return
+    # fetch challenges using post (instead of GET) 
+    client -> wfe: POST /acme/authz/PAniVnsZcis
+    wfe -> client: Authorizations + expiry
+    # signal readiness of one challenge for validation
+    client -> wfe: POST /acme/chall/prV_B7yEyA4
+    wfe -> ra: grpc:updateAuthorization
+    ra -> va: grpc:PerformValidation
+    ra -> va1: grpc:PerformValidation
+    ra -> va2: grpc:PerformValidation
+    validation: Multi-Vantage point Validation {
+      va -> client: connect to domain through separate BGP route
+      va1 -> client: connect to domain through separate BGP route
+      va2 -> client: connect to domain through separate BGP route
+    }
+  }
+  va -> ra: grpc:return
+  ra -> wfe: grpc:return
+  # client indicates completion of all challenges
+  client -> wfe: POST /acme/order/TOlocE8rfgo/finalize
+  # polling POST-as-GET to monitor order status
+  client -> wfe: POST /acme/order
+  # download the certificate
+  client -> wfe: POST /acme/certificate
+}
+
