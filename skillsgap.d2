@@ -1,0 +1,108 @@
+classes: {
+  label: {
+    style: {
+      fill: transparent
+      stroke: transparent
+    }
+  }
+  column: {
+    style: {
+      stroke: transparent
+    }
+  }
+}
+**.style.font-size: 30
+grid-columns: 6
+**.grid-gap: 0
+stage: {
+  grid-columns: 1
+  class: column
+  **.class: label
+
+  culture
+  product/service design
+  organizational structure
+  process
+  methodolgy
+  application architecture
+  communications
+  testing
+  monitoring
+  delivery
+  maintainance
+  provisioning
+  infrastructure
+}
+
+noprocess: No Process {
+  grid-columns: 1
+  class: column
+  individualist
+  arbitrary
+  single contributor
+  reactive ad hoc
+  work planning
+  emerging from trial and error
+  batch/intermittant
+  none
+  ad-hoc monitoring
+  infrequent releases
+  hours of operation
+  manual
+  single server
+}
+
+waterfall: Waterfall {
+  grid-columns: 1
+  class: column
+  predictive
+  long term planning
+  functional matrix
+  waterfall
+  project management
+  3 tier monolith
+  synchronous
+  black box testing by separate team
+  separate team (without context)
+  periodic releases
+  regularly scheduled downtime
+  scripted
+  single VM
+}
+
+agile: Agile {
+  grid-columns: 1
+  class: column
+  iterative
+  feature driven
+  cross functional teams
+  agile (Scrum/XP)
+  project management
+  MVC monolith
+  synchronous
+  developers unit test backend code only
+  monitored by the team that builds it
+  continuous delivery
+  downtime during updates
+  config management
+  single VM
+}
+
+tbs: TBS EA Framework {
+  grid-columns: 1
+  class: column
+  Collaborative
+  user driven
+  Multi-disciplinary Teams
+  design thinking + agile + lean
+  product management
+  distributed, loosely coupled services
+  asynchronous
+  Developers test front and backend with automated coverage
+  designed for observability + self healing
+  Continuous deployments
+  zero downtime updates/upgrades
+  Infrastructure as Code
+  compute cluster (Kubernetes or FaaS)
+}
+
