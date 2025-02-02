@@ -1,0 +1,84 @@
+direction: right
+
+# also consider multiple versions of each
+
+router: Unified Data API {
+  icon: https://upload.wikimedia.org/wikipedia/commons/1/17/GraphQL_Logo.svg
+  shape: image
+}
+
+apione: Team One API {
+  icon: https://upload.wikimedia.org/wikipedia/commons/1/17/GraphQL_Logo.svg
+  shape: image
+}
+pg: Postgres Database {
+  icon: https://icons.terrastruct.com/dev%2Fpostgresql.svg
+  shape: image
+}
+apione -> pg
+
+apitwo: Team Two API {
+  icon: https://upload.wikimedia.org/wikipedia/commons/1/17/GraphQL_Logo.svg
+  shape: image
+}
+oracle: Oracle Database {
+  icon: https://icons.terrastruct.com/dev%2Foracle.svg
+  shape: image
+}
+apitwo -> oracle
+
+apithree: Team Three API {
+  icon: https://upload.wikimedia.org/wikipedia/commons/1/17/GraphQL_Logo.svg
+  shape: image
+}
+
+rest: "{ReST:API}" {
+  style: {
+    font-size: 30
+    fill: transparent
+    stroke: transparent
+  }
+}
+
+apithree -> rest
+
+browser: HTML/CSS {
+  icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+  shape: image
+}
+
+phone: IOS UIView/Android View {
+  icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
+  shape: image
+}
+
+laptop: Apple SwiftUI/MS WinUI3 {
+  icon: https://icons.terrastruct.com/tech%2Flaptop.svg
+  shape: image
+}
+
+desktop: Apple SwiftUI/MS WinUI3 {
+  icon: https://icons.terrastruct.com/tech%2Fdesktop.svg
+  shape: image
+}
+
+watch: WearOS UI/SwiftUI {
+  icon: https://raw.githubusercontent.com/twbs/icons/refs/heads/main/icons/smartwatch.svg
+  shape: image
+}
+
+vr: Unity UI {
+  icon: https://raw.githubusercontent.com/twbs/icons/refs/heads/main/icons/headset-vr.svg
+  shape: image
+}
+
+browser -> router
+phone -> router
+laptop -> router
+desktop -> router
+vr -> router
+watch -> router
+router -> apione: delegates
+router -> apitwo: delegates
+router -> apithree: delegates
+
