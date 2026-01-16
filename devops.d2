@@ -112,8 +112,7 @@ pull: "Pull Model" {
     }
   }
   gh -> gcp.project.vpc.fw.cloudbuild: transmits repo events via https
-  gcp.project.vpc.fw.k8s.flux -> gh: pull config via ssh
-  gcp.project.vpc.fw.k8s.flux -> gh: commit new version numbers via ssh
+  gcp.project.vpc.fw.k8s.flux -> gh: pull config via ssh\ncommit new version\nnumbers via ssh
   gcp.project.vpc.fw.k8s.flux -> gcp.project.vpc.fw.k8s.k8s: apply config to k8s
   gcp.project.vpc.fw.k8s.k8s -> gcp.project.vpc.fw.registry: pull images via https
   gcp.project.vpc.fw.k8s.flux -> gcp.project.vpc.fw.registry: monitor for new images
