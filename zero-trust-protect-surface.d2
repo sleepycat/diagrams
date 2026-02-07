@@ -1,0 +1,345 @@
+direction: right
+
+***: {
+  style: {
+    font-size: 30
+  }
+}
+
+(*** -> ***)[*]: {
+  style: {
+    stroke: "#000000"
+
+    font-size: 30
+  }
+}
+
+(*** <- ***)[*]: {
+  style: {
+    stroke: "#000000"
+
+    font-size: 30
+  }
+}
+
+(*** <-> ***)[*]: {
+  style: {
+    stroke: "#000000"
+
+    font-size: 30
+  }
+}
+
+# ui: Client side app UI {
+
+#   icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/general/react-browser.svg
+
+#   shape: image
+
+#   width: 200
+
+#   height: 200
+
+# }
+
+internet: Internet {
+  shape: cloud
+
+  style: {
+    stroke: "#000000"
+  }
+}
+
+letsencrypt: "Let's Encrypt" {
+  link: https://letsencrypt.org/how-it-works/
+
+  icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/letsencrypt/logo.svg
+
+  shape: image
+}
+
+ado: Azure DevOps {
+  link: https://azure.microsoft.com/en-us/products/devops
+
+  icon: https://icons.terrastruct.com/azure%2FDevOps%20Service%20Color%2FAzure%20DevOps.svg
+
+  style: {
+    stroke: "#808080"
+
+    fill: "#ffffff"
+  }
+
+  shape: image
+}
+
+azure: "" {
+  style: {
+    stroke: "#78aae2"
+
+    fill: "#ecf3fb"
+  }
+
+  azureicon: "" {
+    icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/azure/text-logo.svg
+
+    width: 300
+
+    shape: image
+  }
+
+  entra: Tenent EntraID {
+    shape: image
+
+    icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/azure/Icons/identity/10222-icon-service-Entra-Domain-Services.svg
+  }
+
+  subscription: "" {
+    style: {
+      stroke: "#d2b34e"
+
+      fill: "#fff2cc"
+    }
+
+    subscriptionicon: Application subscription {
+      icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/azure/Icons/general/10002-icon-service-Subscriptions.svg
+
+      width: 100
+
+      shape: image
+    }
+
+    vnet: Prod VNET {
+      style: {
+        stroke: "#000000"
+
+        font-color: "#000000"
+
+        stroke-dash: 3
+
+        fill: transparent
+      }
+
+      rg: Resource Group {
+        style: {
+          stroke: "#000000"
+
+          font-color: "#000000"
+
+          stroke-dash: 3
+
+          fill: transparent
+        }
+
+        fw: Firewall: 80/443 {
+          style: {
+            stroke: black
+
+            font-color: black
+
+            stroke-dash: 3
+
+            fill: transparent
+          }
+
+          registry: Container\n Registry {
+            link: https://azure.microsoft.com/en-us/products/container-registry
+
+            icon: https://github.com/sleepycat/diagrams/raw/refs/heads/main/icons/azure/Icons/containers/10105-icon-service-Container-Registries.svg
+
+            style: {
+              stroke: "#808080"
+
+              fill: "#ffffff"
+            }
+
+            shape: image
+          }
+
+          dns: Azure Public\n DNS {
+            link: https://learn.microsoft.com/en-us/azure/dns/public-dns-overview
+
+            icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/azure/Icons/networking/10064-icon-service-DNS-Zones.svg
+
+            style: {
+              stroke: "#808080"
+
+              fill: "#ffffff"
+            }
+
+            shape: image
+          }
+
+          aks: AKS Automatic Cluster {
+            link: https://azure.microsoft.com/en-us/blog/azure-kubernetes-service-automatic-fast-and-frictionless-kubernetes-for-all/
+
+            style: {
+              stroke: "#000000"
+
+              font-color: "#000000"
+
+              fill: white
+            }
+
+            width: 100
+
+            gitopsns: GitOps namespace {
+              style: {
+                stroke: transparent
+
+                fill: "#f2f2f2"
+              }
+
+              flux: GitOps operator {
+                link: https://fluxcd.io/
+
+                icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/flux/logo.svg
+
+                shape: image
+              }
+            }
+
+            ingressns: Ingress namespace {
+              style: {
+                stroke: transparent
+
+                fill: "#f2f2f2"
+              }
+
+              ingress: Ingress {
+                link: https://www.pomerium.com/
+
+                icon: https://www.pomerium.com/img/logo.svg
+
+                shape: image
+              }
+
+              certmanager: TLS Certificate Manager {
+                link: https://cert-manager.io/
+
+                icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/certmanager/logo.svg
+
+                shape: image
+              }
+
+              secret: TLS keys {
+                link: "https://cert-manager.io/docs/usage/certificate/#:~:text=The%20signed%20certificate%20and%20private%20key%20are%20then%20stored%20in%20the%20specified%20Secret%20resource."
+
+                icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/kubernetes/secret.svg
+
+                shape: image
+              }
+            }
+
+            # apins: API namespace {
+
+            #   style: {
+
+            #     stroke: transparent
+
+            #     fill: "#f2f2f2"
+
+            #   }
+
+            #   spring: Spring API {
+
+            #     icon: https://github.com/sleepycat/diagrams/raw/refs/heads/main/icons/java/spring-graphql/logo.svg
+
+            #     shape: image
+
+            #   }
+
+            # }
+
+            uins: UI namespace {
+              style: {
+                stroke: transparent
+
+                fill: "#f2f2f2"
+              }
+
+              caddy: UI {
+                icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/caddy/logo.svg
+
+                shape: image
+
+                width: 150
+
+                height: 150
+              }
+            }
+
+            # dbns: Database namespace {
+
+            # style: {
+
+            #   stroke: transparent
+
+            #   fill: "#f2f2f2"
+
+            # }
+
+            # pg: PostgreSQL Database Cluster {
+
+            #   icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/ cloudnativepg/logo.svg
+
+            #   shape: image
+
+            # }
+
+            # }
+          }
+        }
+      }
+    }
+  }
+}
+
+azure.entra <-> azure.subscription.vnet.rg.fw.aks.ingressns.ingress: authentication
+
+# azure.subscription.vnet.rg.fw.aks.ingressns.ingress -> azure.subscription.vnet.rg.fw.aks.apins: mTLS
+
+azure.subscription.vnet.rg.fw.aks.ingressns.ingress -> azure.subscription.vnet.rg.fw.aks.uins: mTLS
+
+azure.subscription.vnet.rg.fw.aks.ingressns.ingress <-> internet: https:443
+
+azure.subscription.vnet.rg.fw.aks.ingressns.certmanager <- letsencrypt: DNS-01
+
+azure.subscription.vnet.rg.fw.aks.ingressns.certmanager -> azure.subscription.vnet.rg.fw.dns: https:443
+
+letsencrypt -> azure.subscription.vnet.rg.fw.dns: verifies ownership
+
+azure.subscription.vnet.rg.fw.aks.ingressns.secret <- azure.subscription.vnet.rg.fw.aks.ingressns.ingress: terminates TLS
+
+azure.subscription.vnet.rg.fw.aks.ingressns.certmanager -> azure.subscription.vnet.rg.fw.aks.ingressns.secret: store TLS keys
+
+# azure.subscription.vnet.rg.fw.aks.apins -> azure.subscription.vnet.rg.fw.aks.dbns.pg: mTLS
+
+ado -> azure.subscription.vnet.rg.fw.registry: push image
+
+ado <- azure.subscription.vnet.rg.fw.aks.gitopsns.flux: pulls config
+
+azure.subscription.vnet.rg.fw.registry <- azure.subscription.vnet.rg.fw.aks.gitopsns.flux: poll for new images
+
+explanation: |md
+
+  # Zero Trust Protect Surface Architecture
+
+  This project uses the ["subscription per application" strategy](https://www.virtualtarzan.com/azure-subscriptions-design-patterns/#:~:text=this%20pattern%20will%20limit%20the%20risk%20of%20any%20changes%20impacting%20other%20applications.) reduce risk, limit blast radius, and allow for per-project risk decisions.
+
+  An authenticating proxy is then used to ensure that only strongly authenticated users can access the application. This proxy delegates incoming requests to EntraID.
+
+  - Aligns with Zero Trust Architecture (ZTA)
+
+    - A single protect surface, requiring all communications to be authenticated.
+
+    - A full ZTA requires many of these, along with access decisions based on device and user auth.
+
+  - Aligns with TBS Enterprise Architecture Framework.
+
+    - "Use distributed architectures"
+
+    - "Support zero-downtime deployments"
+
+    - "Design for cloud mobility"
+| {near: center-right}
+
