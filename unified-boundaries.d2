@@ -1,0 +1,152 @@
+clouds: "" {
+  grid-rows: 1
+  style: {
+    stroke: transparent
+    fill: transparent
+  }
+
+  gcp: "" {
+    style: {
+      stroke: "#000000"
+      fill: "#f1f3f4"
+    }
+
+    folder: Folder {
+      grid-rows: 1
+      style: {
+        stroke: transparent
+        fill: transparent
+      }
+
+      p1: Project\n(Unified Security/Billing boundary) {
+        style: {
+          stroke: "#ffffff"
+          fill: "#e1f6fe"
+        }
+
+        vpc: Default VPC Network 10.1.0.0/16 {
+          style: {
+            stroke: blue
+            font-color: blue
+            stroke-dash: 3
+            fill: transparent
+          }
+
+          fw: Firewall {
+            style: {
+              stroke: black
+              font-color: black
+              stroke-dash: 3
+              fill: transparent
+            }
+
+            app: Application {
+              style: {
+                stroke: "#808080"
+                fill: "#ffffff"
+              }
+            }
+          }
+        }
+      }
+    }
+
+    gcpicon: "" {
+      icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/gcp/logo-text.svg
+      width: 300
+      shape: image
+    }
+  }
+  azure: "" {
+    style: {
+      stroke: "#000000"
+      fill: "#ecf3fb"
+    }
+
+    mg: Management Group {
+      grid-rows: 1
+      style: {
+        stroke: transparent
+        fill: transparent
+      }
+
+      sub1: Subscription\n(Unified Security/Billing boundary) {
+        style: {
+          stroke: "#d2b34e"
+          fill: "#fff2cc"
+        }
+
+        vnet: Default VNet 10.0.0.0/8 {
+          style: {
+            stroke: "#000000"
+            font-color: "#000000"
+            stroke-dash: 3
+            fill: transparent
+          }
+
+          fw: Firewall: 80/443 {
+            style: {
+              stroke: black
+              font-color: black
+              stroke-dash: 3
+              fill: transparent
+            }
+
+            app: Application
+          }
+        }
+      }
+    }
+    azureicon: "" {
+      icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/azure/text-logo.svg
+      width: 300
+      shape: image
+    }
+  }
+
+  aws: "" {
+    style: {
+      stroke: "#000000"
+      fill: "#f1f3f4"
+    }
+    org: Organization {
+      style: {
+        stroke: transparent
+        fill: "#f1f3f4"
+      }
+      ou: Organizational Unit {
+        grid-rows: 1
+        style: {
+          stroke: transparent
+          fill: transparent
+        }
+        account1: Account\n(Unified Security/Billing boundary) {
+          style: {
+            stroke: "#000000"
+          }
+          vpc: Default VPC Network 10.1.0.0/16 {
+            style: {
+              fill: transparent
+              stroke-dash: 3
+              stroke: "#000000"
+            }
+            fw: Firewall {
+              style: {
+                fill: transparent
+                stroke-dash: 3
+                stroke: "#000000"
+              }
+              app: Application
+            }
+          }
+        }
+      }
+
+      awsicon: "" {
+        icon: ./icons/aws/logo.svg
+        width: 300
+        shape: image
+      }
+    }
+  }
+}
