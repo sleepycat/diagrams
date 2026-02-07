@@ -1,0 +1,249 @@
+***: {
+  style: {
+    font-size: 30
+  }
+}
+
+(*** -> ***)[*]: {
+  style: {
+    stroke: "#000000"
+    font-size: 30
+  }
+}
+
+(*** <- ***)[*]: {
+  style: {
+    stroke: "#000000"
+    font-size: 30
+  }
+}
+
+(*** <-> ***)[*]: {
+  style: {
+    stroke: "#000000"
+    font-size: 30
+  }
+}
+
+ui: Client side app UI {
+  icon: ./icons/general/react-browser.svg
+  shape: image
+
+  width: 200
+  height: 200
+}
+
+letsencrypt: "Let's Encrypt" {
+  icon: ./icons/letsencrypt/logo.svg
+  shape: image
+}
+
+azure: "" {
+  style: {
+    stroke: "#000000"
+    stroke-dash: 3
+    fill: transparent
+  }
+
+  azureicon: "" {
+    icon: ./icons/azure/text-logo.svg
+    width: 300
+    shape: image
+  }
+
+  subscription: "" {
+    style: {
+      stroke: transparent
+      fill: "#ecf3fb"
+    }
+
+    subscriptionicon: "Application subscription" {
+      icon: ./icons/azure/Icons/general/10002-icon-service-Subscriptions.svg
+      width: 100
+      shape: image
+    }
+
+    vnet: Default VNet 10.0.0.0/8 {
+      style: {
+        stroke: "#000000"
+        font-color: "#000000"
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall: 80/443 {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+
+        registry: Azure Container Registry {
+          icon: ./icons/azure/Icons/containers/10105-icon-service-Container-Registries.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+          shape: image
+        }
+
+        ado: Azure DevOps {
+          icon: ./icons/azure/Icons/devops/10261-icon-service-Azure-DevOps.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+          shape: image
+        }
+        dns: Azure DNS {
+          icon: ./icons/azure/Icons/networking/10064-icon-service-DNS-Zones.svg
+          style: {
+            stroke: "#808080"
+            fill: "#ffffff"
+          }
+          shape: image
+        }
+
+        aks: AKS Automatic Cluster {
+          style: {
+            stroke: "#000000"
+            font-color: "#000000"
+            fill: white
+          }
+
+          gitopsns: GitOps namespace {
+            style: {
+              stroke: transparent
+              fill: "#f2f2f2"
+            }
+
+            flux: GitOps operator {
+              icon: ./icons/flux/logo.svg
+              shape: image
+            }
+          }
+
+          ingressns: Ingress namespace {
+            style: {
+              stroke: transparent
+              fill: "#f2f2f2"
+            }
+            ingress: Istio Ingress {
+              icon: ./icons/istio/logo.svg
+              shape: image
+            }
+            certmanager: TLS Certificate Manager {
+              icon: ./icons/certmanager/logo.svg
+              shape: image
+            }
+            secret: TLS keys {
+              icon: ./icons/kubernetes/secret.svg
+              shape: image
+            }
+          }
+
+          apins: API namespace {
+            style: {
+              stroke: transparent
+              fill: "#f2f2f2"
+            }
+
+            spring: Spring GraphQL API {
+              icon: ./icons/java/spring-graphql/logo.svg
+              shape: image
+            }
+          }
+
+          uins: UI namespace {
+            style: {
+              stroke: transparent
+              fill: "#f2f2f2"
+            }
+
+            express: Static File server for UI {
+              icon: ./icons/caddy/logo.svg
+              shape: image
+              width: 150
+              height: 150
+            }
+          }
+
+          dbns: Database namespace {
+            style: {
+              stroke: transparent
+              fill: "#f2f2f2"
+            }
+
+            pg: PostgreSQL Database Cluster {
+              icon: ./icons/cloudnativepg/logo.svg
+              shape: image
+            }
+          }
+        }
+      }
+    }
+  }
+
+  subscription2: "" {
+    direction: down
+    style: {
+      stroke: transparent
+      fill: "#ecf3fb"
+    }
+
+    subscriptionicon: "Application subscription 2" {
+      icon: ./icons/azure/Icons/general/10002-icon-service-Subscriptions.svg
+      width: 100
+      shape: image
+    }
+
+    vnet: Default VNet 10.1.0.0/16 {
+      style: {
+        stroke: "#000000"
+        font-color: "#000000"
+        stroke-dash: 3
+        fill: transparent
+      }
+
+      fw: Firewall: 80/443 {
+        style: {
+          stroke: black
+          font-color: black
+          stroke-dash: 3
+          fill: transparent
+        }
+
+        aks: AKS Automatic Cluster {
+          style: {
+            stroke: "#000000"
+            font-color: "#000000"
+            fill: white
+          }
+
+          App 2
+        }
+      }
+    }
+  }
+
+  subscription2 <-> subscription: ❌
+  explanation: |md
+    Connections between services are routed over the internet.
+  | {near: azure.subscription2}
+}
+
+azure.subscription.vnet.fw.aks.ingressns.ingress -> azure.subscription.vnet.fw.aks.apins: mTLS
+azure.subscription.vnet.fw.aks.ingressns.ingress -> azure.subscription.vnet.fw.aks.uins: mTLS
+azure.subscription.vnet.fw.aks.ingressns.ingress <-> ui: https:443
+azure.subscription.vnet.fw.aks.ingressns.certmanager <- letsencrypt: DNS-01
+azure.subscription.vnet.fw.aks.ingressns.certmanager <- azure.subscription.vnet.fw.dns: https:443
+letsencrypt -> azure.subscription.vnet.fw.dns: verifies ownership
+
+azure.subscription.vnet.fw.aks.ingressns.secret <- azure.subscription.vnet.fw.aks.ingressns.ingress: terminates TLS
+azure.subscription.vnet.fw.aks.ingressns.certmanager -> azure.subscription.vnet.fw.aks.ingressns.secret: store TLS keys
+
+azure.subscription.vnet.fw.aks.apins -> azure.subscription.vnet.fw.aks.dbns.pg: mTLS
+
+azure.subscription.vnet.fw.ado <- azure.subscription.vnet.fw.aks.gitopsns.flux: pulls config
+azure.subscription.vnet.fw.registry <- azure.subscription.vnet.fw.aks.gitopsns.flux: poll for new images
