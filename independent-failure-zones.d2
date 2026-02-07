@@ -1,0 +1,191 @@
+classes: {
+  zone: {
+    style: {
+      fill: transparent
+      stroke-dash: 5
+    }
+  }
+  failure: {
+    style: {
+      fill: transparent
+      stroke-dash: 5
+      stroke: "#ff0000"
+    }
+  }
+}
+
+indpendent: Creating Independent Failure Zones {
+  style: {
+    fill: transparent
+    stroke: transparent
+    font-size: 50
+  }
+  grid-rows: 1
+  grid-gap: 150
+  sharedzones: Shared zones: Classic ITSG-38 Zones {
+    style: {
+      fill: transparent
+    }
+    hub: {
+      class: failure
+    }
+    front: {
+      label: Presentation zone
+      class: zone
+    }
+    apps: {
+      label: Application zone
+      class: failure
+    }
+    databases: {
+      label: Data(base) zone
+      class: zone
+    }
+
+    hub.fw -> front.a: {class: failure}
+    hub.fw -> front.b: {class: failure}
+    hub.fw -> front.c: {class: failure}
+
+    front.a -> apps.a
+    front.b -> apps.b
+    front.c -> apps.c
+
+    apps.a -> databases.a
+    apps.b -> databases.b
+    apps.c -> databases.c
+  }
+
+  sharednet: Shared networking: Modern Hub-and-Spoke {
+    class: failure
+    style: {
+      fill: transparent
+    }
+    subscription: {
+      class: zone
+      hub: {
+        class: failure
+      }
+      spoke*: {
+        class: zone
+        label: Spoke
+      }
+      spoke*.front*: {
+        class: zone
+        label: presentation
+      }
+      spoke*.psnet*: {
+        class: zone
+        label: application
+      }
+      spoke*.dbsnet*: {
+        class: zone
+        label: data(base)
+      }
+      hub.fw -> spokea.fronta.a: {class: failure}
+      hub.fw -> spokeb.frontb.b: {class: failure}
+      hub.fw -> spokec.frontc.c: {class: failure}
+
+      spokea.fronta.a -> spokea.psneta.a
+      spokeb.frontb.b -> spokeb.psnetb.b
+      spokec.frontc.c -> spokec.psnetc.c
+
+      spokea.psneta.a -> spokea.dbsneta.a
+      spokeb.psnetb.b -> spokeb.dbsnetb.b
+      spokec.psnetc.c -> spokec.dbsnetc.c
+    }
+  }
+
+  sharedtenant: Shared Tenant (Shared Identity) {
+    class: failure
+    style: {
+      fill: transparent
+    }
+    sub*: {
+      class: zone
+      label: subscription
+    }
+    sub*.lb*: {
+      label: loadbalancer
+    }
+    sub*.cluster*: {
+      label: cluster
+      style: {
+        fill: transparent
+      }
+    }
+    sub*.cluster*.proxy*: {
+      label: proxy
+    }
+
+    suba: {
+      class: failure
+      lba -> clustera.proxya.a
+      clustera.proxya.a -> clustera.proxyb.b
+      clustera.proxyb.b -> clustera.proxyc.c
+    }
+    subb: {
+      class: zone
+      lba -> clustera.proxya.a
+      clustera.proxya.a -> clustera.proxyb.b
+      clustera.proxyb.b -> clustera.proxyc.c
+    }
+    subc: {
+      class: zone
+      lba -> clustera.proxya.a
+      clustera.proxya.a -> clustera.proxyb.b
+      clustera.proxyb.b -> clustera.proxyc.c
+    }
+  }
+
+  tenant: Dedicated Tenant (Federated Identity) {
+    style: {
+      fill: transparent
+    }
+    sub*: {
+      class: zone
+      label: subscription
+    }
+    sub*.lb*: {
+      label: loadbalancer
+    }
+    sub*.cluster*: {
+      label: cluster
+      style: {
+        fill: transparent
+      }
+    }
+    sub*.cluster*.proxy*: {
+      label: proxy
+    }
+
+    suba: {
+      class: failure
+      lba -> clustera.proxya.a
+      clustera.proxya.a -> clustera.proxyb.b
+      clustera.proxyb.b -> clustera.proxyc.c
+    }
+  }
+  sharedzones -> sharednet: evolves to
+  sharednet -> sharedtenant: evolves to
+  sharedtenant -> tenant: evolves to
+}
+
+explanation: |md
+  # Drivers
+  * Increasingly sophisticated, active attackers
+  * Reliance on sensitive data 
+  * Required delivery of digital services (access to data) to partners
+  # Benefits
+  * Create independent failure zones:  Architecture decides largest failure.
+  * All parts of a system gathered in the same security boundary.
+  * Dedicated spaces is an enabler:
+    * Knowable blast radius allows for smarter/faster risk descisions.
+    * allows for tailored security (tuned to application/technology/business needs) 
+    * allows use of specialized tools/databases/infrastructure
+    * FinOps:
+      * Clear costs: Alignment of system/security boundaries with cloud billing boundaries.
+      * Eliminate "common costs" from hub portion of hub-and-spoke.
+      * Allows end-to-end optimization to reduce cost
+
+|
+
