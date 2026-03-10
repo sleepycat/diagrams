@@ -1,0 +1,96 @@
+direction: down
+classes: {
+  humans: {
+    style: {
+      fill: "#f7f3f6"
+      stroke: "#c6a9bf"
+    }
+  }
+  machines: {
+    style: {
+      fill: "#ecf7fd"
+      stroke: "#5ab9ed"
+    }
+  }
+  line: {
+    style: {
+      stroke: "#9b949e"
+    }
+  }
+  db: {
+    style: {
+      stroke: "#6d746d"
+      fill: "#d7d9d7"
+    }
+  }
+}
+
+vars: {
+  d2-config: {
+    sketch: true
+  }
+  d2-legend: {
+    humans: Human Users of applications {
+      class: humans
+    }
+    machines: Machine Users of API {
+      class: machines
+    }
+    data: Organizational data store {
+      class: db
+    }
+  }
+}
+
+llmusers: Human Users of AI/LLMs {
+  class: humans
+}
+
+llmapp: LLM based Application (eg: WebUI) {
+  class: machines
+}
+
+llm: AI/Large Language Model (eg: Ollama) {
+  class: machines
+}
+
+humanusers: Human Application Users {
+  class: humans
+}
+humanusers -> boundary.ui: interact with application {class: line}
+machineusers: Other organizational\n systems {
+  class: machines
+}
+machineusers -> boundary.api: API call {class: line}
+
+llmusers -> llmapp: interact with application {class: line}
+llmapp -> llm: API call {class: line}
+llm -> boundary.mcp: API call {class: line}
+boundary.mcp -> boundary.api: API call {class: line}
+
+boundary: Team/System Boundary {
+  style: {
+    fill: transparent
+    stroke-dash: 3
+    stroke: "#999999"
+  }
+
+  ui: example.com {
+    class: machines
+  }
+  api: example.com/api {
+    class: machines
+  }
+  mcp: Model Context Protocol Server {
+    class: machines
+  }
+
+  db: Database {
+    shape: cylinder
+    class: db
+  }
+  ui -> api: API call {
+    class: line
+  }
+  api -> db: {class: line}
+}
