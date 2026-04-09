@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="83.179321mm"
+   height="86.112228mm"
+   viewBox="0 0 83.179322 86.112229"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <style
+       id="style1">.cls-1{fill:#231f20;stroke:#231f20;stroke-miterlimit:10;stroke-width:10px;}</style>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-250.77492,-118.12462)">
+    <linearGradient
+       id="a"
+       gradientUnits="userSpaceOnUse"
+       x1="75"
+       x2="106.522"
+       y1="17.4121"
+       y2="125.731"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,144.19792,141.55208)">
+      <stop
+         offset="0"
+         stop-color="#5e6294"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#878bb2"
+         id="stop2" />
+    </linearGradient>
+    <desc
+       id="desc1">
+    Nats Icon Streamline Icon: https://streamlinehq.com
+  </desc>
+    <g
+       id="g2">
+      <path
+         fill="#34a574"
+         d="m 292.36472,118.12462 h 41.58952 v 33.71621 h -41.58952 z"
+         stroke-width="0.916087"
+         id="path1" />
+      <path
+         fill="#27aae1"
+         d="m 250.77492,118.12462 h 41.58952 v 33.71621 h -41.58952 z"
+         stroke-width="0.916087"
+         id="path2-5" />
+      <path
+         fill="#8dc63f"
+         d="m 333.95383,151.87172 v 33.71621 H 306.598 v 18.64892 l -20.34701,-18.58715 6.11331,-0.24652 v -33.53091 z"
+         stroke-width="0.916087"
+         id="path3-3" />
+      <path
+         fill="#375c93"
+         d="m 292.36444,151.87172 v 39.21017 l -6.11345,-5.43219 h -35.47607 v -33.77798 z"
+         stroke-width="0.916087"
+         id="path4" />
+      <path
+         fill="#ffffff"
+         d="m 309.59351,161.72094 v -27.91147 h 9.94187 v 36.09362 h -15.06716 l -30.41255,-28.40562 v 28.4365 h -9.9729 v -36.1245 h 15.5922 z"
+         stroke-width="0.916087"
+         id="path5" />
+    </g>
+    <title
+       id="title1">Asset 3</title>
+  </g>
+</svg>
