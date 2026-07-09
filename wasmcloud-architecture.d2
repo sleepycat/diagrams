@@ -1,0 +1,92 @@
+vars: {
+  d2-config: {
+    theme-id: 301 # terminal-greyscale
+  }
+}
+
+classes: {
+  trafficpath: {
+    style: {stroke: green}
+  }
+  controlplane: {
+    style: {
+      stroke: grey
+    }
+  }
+}
+
+internet: {
+  shape: cloud
+}
+
+github: {
+  icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/github/logo.svg
+  shape: image
+}
+
+kubernetes: Kubernetes {
+  direction: right
+  argo: {
+    icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/argo/logo.svg
+    shape: image
+  }
+  ctl: "" {
+    shape: image
+    icon: https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/svg/infrastructure_components/labeled/control-plane.svg
+  }
+  etcd: "" {
+    shape: image
+    icon: https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/svg/infrastructure_components/labeled/etcd.svg
+  }
+  lb: LoadBalancer Service {
+    icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/kubernetes/svc.svg
+    shape: image
+  }
+  wasmcloud: Wasmcloud {
+    nats: {
+      icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/nats/logo.svg
+      shape: image
+    }
+    endpointslices: EndpointSlices {
+      style: {multiple: true}
+    }
+    hostgroup: {
+      host: {
+        host_plugin: host plugin \n(shared between workloads)
+        workload: {
+          component: component\n(stateless) {
+            shape: image
+            icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/wasm/logo.svg
+          }
+          service: service\n(statefull workload specific) {
+            shape: image
+            icon: https://raw.githubusercontent.com/sleepycat/diagrams/refs/heads/main/icons/wasm/logo.svg
+          }
+          component -> service: in-process
+        }
+        workload -> host_plugin: in-process
+      }
+    }
+    logo: "" {
+      icon: https://wasmcloud.com/logo/wasmcloud_green.svg
+      shape: image
+    }
+  }
+}
+kubernetes.ctl -> kubernetes.wasmcloud.runtime-operator: watch desired state
+kubernetes.ctl -> kubernetes.wasmcloud.nats: watch desired state
+kubernetes.wasmcloud.runtime-operator -> kubernetes.wasmcloud.nats: manages {class: controlplane}
+kubernetes.wasmcloud.runtime-operator -> kubernetes.wasmcloud.hostgroup: manages {class: controlplane}
+kubernetes.wasmcloud.runtime-operator -> kubernetes.wasmcloud.endpointslices: manages {class: controlplane}
+
+kubernetes.wasmcloud.nats <-> kubernetes.wasmcloud.hostgroup.host: wasmcloud\ncontrol plane {class: controlplane}
+
+kubernetes.argo -> github: pull config
+kubernetes.argo -> kubernetes.etcd: write config
+kubernetes.ctl -> kubernetes.etcd: read config
+
+# Traffic path
+internet -> kubernetes.lb: data plane {class: trafficpath}
+kubernetes.lb -> kubernetes.wasmcloud.endpointslices: data plane {class: trafficpath}
+
+kubernetes.wasmcloud.endpointslices -> kubernetes.wasmcloud.hostgroup.host.workload.component: data plane {class: trafficpath}
