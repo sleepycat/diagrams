@@ -1,0 +1,294 @@
+**: {
+  style: {
+    font-size: 30
+  }
+}
+
+(** -> **)[*]: {
+  style: {
+    stroke: "#000000"
+    font-size: 30
+  }
+}
+
+(** <- **)[*]: {
+  style: {
+    stroke: "#000000"
+    font-size: 30
+  }
+}
+
+(** <-> **)[*]: {
+  style: {
+    stroke: "#000000"
+    font-size: 30
+  }
+}
+
+gcp: "" {
+  style: {
+    stroke: "#000000"
+    fill: "#f1f3f4"
+  }
+
+  gcpicon: "" {
+    icon: ./icons/gcp/logo-text.svg
+    width: 300
+    shape: image
+  }
+
+  org: Organization {
+    style: {
+      stroke: "#ffffff"
+      fill: "#eeebea"
+    }
+    grid-columns: 2
+    stream1: Stream 1 folder {
+      style: {
+        stroke: "#ffffff"
+        fill: "#fef7e0"
+      }
+      cbr: CBR 1 (shared) {
+        project: Project {
+          style: {
+            stroke: "#ffffff"
+            fill: "#e1f6fe"
+          }
+
+          vpc: Default VPC Network 10.1.0.0/16 {
+            style: {
+              stroke: blue
+              font-color: blue
+              stroke-dash: 3
+              fill: transparent
+            }
+
+            fw: Firewall {
+              style: {
+                stroke: black
+                font-color: black
+                stroke-dash: 3
+                fill: transparent
+              }
+
+              workload: Experiment 1
+            }
+          }
+        }
+      }
+    }
+
+    stream2: Stream 2 folder {
+      style: {
+        stroke: "#ffffff"
+        fill: "#fef7e0"
+      }
+      group: "" {
+        grid-rows: 1
+        style: {
+          fill: transparent
+          stroke: transparent
+        }
+        alpha: Alpha Folder {
+          style: {
+            stroke: "#ffffff"
+            fill: "#fef7e0"
+            stroke-width: 10
+          }
+          grid-rows: 1
+          alpha: CBR 2: Alpha (shared) {
+            grid-rows: 1
+            project1: Project 1 {
+              style: {
+                stroke: "#ffffff"
+                fill: "#e1f6fe"
+              }
+
+              vpc: Default VPC Network 10.1.0.0/16 {
+                style: {
+                  stroke: blue
+                  font-color: blue
+                  stroke-dash: 3
+                  fill: transparent
+                }
+
+                fw: Firewall {
+                  style: {
+                    stroke: black
+                    font-color: black
+                    stroke-dash: 3
+                    fill: transparent
+                  }
+
+                  workload: Alpha 1
+                }
+              }
+            }
+            project2: Project 2 {
+              style: {
+                stroke: "#ffffff"
+                fill: "#e1f6fe"
+              }
+
+              vpc: Default VPC Network 10.1.0.0/16 {
+                style: {
+                  stroke: blue
+                  font-color: blue
+                  stroke-dash: 3
+                  fill: transparent
+                }
+
+                fw: Firewall {
+                  style: {
+                    stroke: black
+                    font-color: black
+                    stroke-dash: 3
+                    fill: transparent
+                  }
+
+                  workload: Alpha 2
+                }
+              }
+            }
+          }
+        }
+        beta: Beta Folder {
+          style: {
+            stroke: "#ffffff"
+            fill: "#fef7e0"
+            stroke-width: 10
+          }
+          beta: CBR 3: Beta (shared) {
+            project: Project {
+              style: {
+                stroke: "#ffffff"
+                fill: "#e1f6fe"
+              }
+
+              vpc: Default VPC Network 10.1.0.0/16 {
+                style: {
+                  stroke: blue
+                  font-color: blue
+                  stroke-dash: 3
+                  fill: transparent
+                }
+
+                fw: Firewall {
+                  style: {
+                    stroke: black
+                    font-color: black
+                    stroke-dash: 3
+                    fill: transparent
+                  }
+
+                  workload: Beta 1
+                }
+              }
+            }
+          }
+        }
+      }
+      livefolder: Live workloads folder {
+        style: {
+          stroke: "#ffffff"
+          fill: "#fef7e0"
+          stroke-width: 10
+        }
+        grid-rows: 1
+        live: CBR 5 (dedicated) {
+          project: Isolated Project {
+            style: {
+              stroke: "#ffffff"
+              fill: "#e1f6fe"
+            }
+
+            vpc: Default VPC Network 10.1.0.0/16 {
+              style: {
+                stroke: blue
+                font-color: blue
+                stroke-dash: 3
+                fill: transparent
+              }
+
+              fw: Firewall {
+                style: {
+                  stroke: black
+                  font-color: black
+                  stroke-dash: 3
+                  fill: transparent
+                }
+
+                workload: Live 1
+              }
+            }
+          }
+        }
+        live2: CBR 4 (dedicated) {
+          project: Project {
+            style: {
+              stroke: "#ffffff"
+              fill: "#e1f6fe"
+            }
+
+            vpc: Default VPC Network 10.1.0.0/16 {
+              style: {
+                stroke: blue
+                font-color: blue
+                stroke-dash: 3
+                fill: transparent
+              }
+
+              fw: Firewall {
+                style: {
+                  stroke: black
+                  font-color: black
+                  stroke-dash: 3
+                  fill: transparent
+                }
+
+                workload: Live 2
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+gcp.org.stream2.group.alpha.alpha.project2 -> gcp.org.stream2.group.beta.beta.project: graduation\ncriteria met
+gcp.org.stream2.group.beta.beta.project -> gcp.org.stream2.livefolder.live2.project: graduation\ncriteria met
+explanation: |md
+  In the Government of Canada, SSC's [cloud framework agreement](https://hosting-services-hebergement.canada.ca/s/gc-cloud-fa-catalogue?language=en_US) dictates cloud spending requires a [Cloud Business Requirement](https://hosting-services-hebergement.canada.ca/s/article/What-is-a-Cloud-Business-Requirement?language=en_US) (CBR) number. 
+
+  The bureaucratic overhead/turnaround time and spending limits associated with a CBR require care to ensure service delivery isn't negatively affected.
+
+  The following approach is designed to support experimentation and rapid onboarding of teams in support of the "product team" model.
+
+  ## Stream 1: Time-bound experiments
+  * These represent hands-on experiments and evaluations aimed at building knowledge/skills.
+  * Isolated spaces (dedicated subscriptions) allows for enablement and live data <br/>(live data is required for AI/ML experimentation).
+  * CBR strategy:
+    * Drawing down on a shared CBR reduces bureaucratic overhead to experimentation and enables rapid intake.
+
+  ## Stream 2: Capability development: Alpha, Beta, Live
+  * Three "production" environments based on team/product maturity levels:
+    * **Alpha**: Polished subset of eventual functionality, low operational maturity (eg: uptime, respect for data contracts); Try, don't rely.
+    * **Beta**: Expanded functionality, higher operational maturity (eg: have stated uptime objectives, might not meet them); Use, but excuse.
+    * **Live**: Functionality tracks evolving user needs, high operational maturity; this is a service others can rely on.
+  * Define graduation criteria upfront, move when maturity markers are achieved.
+  * CBR strategy:
+    * Rapid intake of Alpha/Beta workloads into shared CBR.
+    * Workloads/costs distributed across Alpha/Beta CBRs.
+    * Graduation to Beta kicks off background process to create a dedicated CBR for Live.
+    * Capability teams shielded from CBR process.
+  * Security boundaries create autonomy needed for capability delivery:
+    * Limit blast radius with dedicated projects/accounts: insulates organization/others from team failure/compromise.
+    * With limited blast radius, we can safely increase privilege inside projects/accounts: creates enabling environment supporting team autonomy.
+  * Contrast:
+    * "dev/test/prod": building trust in code.
+    * "alpha/beta/live": building trust in teams.
+  <br/>
+  <br/>
+
+| {near: center-right}
